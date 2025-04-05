@@ -11,12 +11,15 @@ struct ContentView: View {
     @State private var viewModel: MovieViewModel = .init(apiService: APIService())
 
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-            Text(viewModel.networkError)
+        ScrollView {
+            ForEach(viewModel.latestMovies) { movie in
+                HStack {
+                    Text(movie.title)
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                }
+                .padding()
+                .border(Color.purple, width: 4)
+            }
         }
         .task {
             await viewModel.loadPopularMovies()
