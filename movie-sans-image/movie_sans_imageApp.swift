@@ -11,7 +11,7 @@ import SwiftUI
 struct movie_sans_imageApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
         }
     }
 }
