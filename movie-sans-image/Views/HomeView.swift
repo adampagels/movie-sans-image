@@ -8,21 +8,25 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var viewModel: MovieViewModel = .init(apiService: APIService())
+    @State private var movieViewModel: MovieViewModel = .init(apiService: APIService())
+    @State private var watchlistViewModel: WatchlistViewModel = .init(watchlistStorage: CoreDataWatchlistStorage())
 
     var body: some View {
         ScrollView {
-            ForEach(viewModel.latestMovies) { movie in
+            ForEach(movieViewModel.latestMovies) { movie in
                 HStack {
                     Text(movie.title)
                         .frame(maxWidth: .infinity, alignment: .topLeading)
+                    Button("add") {
+                        watchlistViewModel.addToWatchlist(movie: movie)
+                    }
                 }
                 .padding()
                 .border(Color.purple, width: 4)
             }
         }
         .task {
-            await viewModel.loadPopularMovies()
+            await movieViewModel.loadPopularMovies()
         }
         .padding()
     }

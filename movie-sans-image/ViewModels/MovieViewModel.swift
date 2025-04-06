@@ -21,7 +21,6 @@ class MovieViewModel {
     func loadPopularMovies() async {
         do {
             latestMovies = try await apiService.fetchPopularMovies()
-            print("latestMovies", latestMovies)
         } catch let error as APIError {
             networkError = error.localizedDescription
         } catch {

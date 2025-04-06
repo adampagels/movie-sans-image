@@ -29,9 +29,30 @@
 		7EC14FF82D9EE50900DD52A5 /* movie-sans-imageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "movie-sans-imageUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7E03AA552DA2A2F600CC9265 /* Exceptions for "movie-sans-image" folder in "movie-sans-imageTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Persistance/WatchlistContainer.xcdatamodeld,
+			);
+			target = 7EC14FED2D9EE50900DD52A5 /* movie-sans-imageTests */;
+		};
+		7E03AA562DA2A2F600CC9265 /* Exceptions for "movie-sans-image" folder in "movie-sans-imageUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Persistance/WatchlistContainer.xcdatamodeld,
+			);
+			target = 7EC14FF72D9EE50900DD52A5 /* movie-sans-imageUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7EC14FE02D9EE50600DD52A5 /* movie-sans-image */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7E03AA552DA2A2F600CC9265 /* Exceptions for "movie-sans-image" folder in "movie-sans-imageTests" target */,
+				7E03AA562DA2A2F600CC9265 /* Exceptions for "movie-sans-image" folder in "movie-sans-imageUITests" target */,
+			);
 			path = "movie-sans-image";
 			sourceTree = "<group>";
 		};
