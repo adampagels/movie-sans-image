@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var movieViewModel: MovieViewModel = .init(apiService: APIService())
-    @State private var watchlistViewModel: WatchlistViewModel = .init(watchlistStorage: CoreDataWatchlistStorage())
+    @State var watchlistViewModel = WatchlistViewModel()
 
     var body: some View {
         ScrollView {

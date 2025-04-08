@@ -8,8 +8,18 @@
 import SwiftUI
 
 struct MyListView: View {
+    @State var watchlistViewModel = WatchlistViewModel()
+
     var body: some View {
         Text("My List View")
+            .task {
+                watchlistViewModel.getWatchlist()
+            }
+        ScrollView {
+            ForEach(watchlistViewModel.watchlist) { watchlistItem in
+                Text(watchlistItem.title ?? "")
+            }
+        }
     }
 }
 

@@ -1,23 +1,17 @@
 //
-//  CoreDataWatchlistStorage.swift
+//  CoreDataService.swift
 //  movie-sans-image
 //
-//  Created by Adam Pagels on 2025-04-06.
+//  Created by Adam Pagels on 2025-04-07.
 //
 
 import CoreData
-import SwiftUI
 
-class CoreDataWatchlistStorage: WatchlistProtocol {
-    let container: NSPersistentContainer
+class CoreDataService: CoreDataServiceProtocol {
+    private let container: NSPersistentContainer
 
-    init() {
-        container = NSPersistentContainer(name: "WatchlistContainer")
-        container.loadPersistentStores { _, error in
-            if let error = error {
-                print("Error loading core data \(error)")
-            }
-        }
+    init(container: NSPersistentContainer = PersistenceController.shared.persistentContainer) {
+        self.container = container
     }
 
     func saveData() {
@@ -43,10 +37,8 @@ class CoreDataWatchlistStorage: WatchlistProtocol {
         newMovie.video = movie.video
         newMovie.vote_average = movie.vote_average ?? 0.0
         newMovie.vote_count = Int16(movie.vote_count ?? 0)
-        newMovie.genre_ids = movie.genre_ids
+//        newMovie.genre_ids = movie.genre_ids
 
-        print("NEW MOVIE", newMovie)
-        print(movie.genre_ids)
         saveData()
     }
 
@@ -54,6 +46,7 @@ class CoreDataWatchlistStorage: WatchlistProtocol {
         let request = NSFetchRequest<WatchlistEntity>(entityName: "WatchlistEntity")
 
         do {
+            print("fetching")
             let watchlist = try container.viewContext.fetch(request)
             return watchlist
         } catch {

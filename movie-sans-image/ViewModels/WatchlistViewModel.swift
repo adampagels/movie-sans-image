@@ -9,13 +9,23 @@ import SwiftUI
 
 @Observable
 class WatchlistViewModel {
-    private let watchlistStorage: CoreDataWatchlistStorage
+    private let coreDataService: CoreDataService
+    var watchlist: [WatchlistEntity] = []
 
-    init(watchlistStorage: CoreDataWatchlistStorage) {
-        self.watchlistStorage = watchlistStorage
+    init(coreDataService: CoreDataService = CoreDataService()) {
+        self.coreDataService = coreDataService
     }
 
     func addToWatchlist(movie: Movie) {
-        watchlistStorage.addToWatchList(movie: movie)
+        coreDataService.addToWatchList(movie: movie)
+    }
+
+    func getWatchlist() {
+        do {
+            let fetchedWatchList = try coreDataService.fetchWatchlist()
+            watchlist = fetchedWatchList
+        } catch {
+            print("this is erroring", error)
+        }
     }
 }
