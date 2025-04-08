@@ -15,7 +15,7 @@ struct MainView: View {
             }
 
             Tab("Home", systemImage: "list.bullet") {
-                MyListView()
+                WatchlistView()
             }
         }
     }

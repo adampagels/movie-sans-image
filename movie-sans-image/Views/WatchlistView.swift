@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MyListView: View {
+struct WatchlistView: View {
     @State var watchlistViewModel = WatchlistViewModel()
 
     var body: some View {
@@ -24,5 +24,5 @@ struct MyListView: View {
 }
 
 #Preview {
-    MyListView()
+    WatchlistView()
 }
