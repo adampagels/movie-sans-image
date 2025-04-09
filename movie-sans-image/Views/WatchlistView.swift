@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct WatchlistView: View {
-    @State var watchlistViewModel = WatchlistViewModel()
+    @Environment(WatchlistViewModel.self) private var watchlistViewModel
 
     var body: some View {
         Text("My List View")
-            .task {
-                watchlistViewModel.getWatchlist()
-            }
-        ScrollView {
+        List {
             ForEach(watchlistViewModel.watchlist) { watchlistItem in
                 Text(watchlistItem.title ?? "")
+                    .listRowSeparator(.hidden)
             }
+            .onDelete(perform: watchlistViewModel.removeFromWatchlist)
         }
     }
 }

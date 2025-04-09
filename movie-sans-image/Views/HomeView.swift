@@ -9,10 +9,10 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var movieViewModel: MovieViewModel = .init(apiService: APIService())
-    @State var watchlistViewModel = WatchlistViewModel()
+    @Environment(WatchlistViewModel.self) private var watchlistViewModel
 
     var body: some View {
-        ScrollView {
+        List {
             ForEach(movieViewModel.latestMovies) { movie in
                 HStack {
                     Text(movie.title)
@@ -21,14 +21,15 @@ struct HomeView: View {
                         watchlistViewModel.addToWatchlist(movie: movie)
                     }
                 }
+                .listRowSeparator(.hidden)
                 .padding()
                 .border(Color.purple, width: 4)
             }
         }
+        .listStyle(PlainListStyle())
         .task {
             await movieViewModel.loadPopularMovies()
         }
-        .padding()
     }
 }
 

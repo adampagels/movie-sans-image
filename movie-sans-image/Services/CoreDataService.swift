@@ -42,11 +42,18 @@ class CoreDataService: CoreDataServiceProtocol {
         saveData()
     }
 
+    func deleteWatchlistItem(indexSet: IndexSet, entityList: [WatchlistEntity]) {
+        guard let index = indexSet.first else { return }
+        let entity = entityList[index]
+
+        container.viewContext.delete(entity)
+        saveData()
+    }
+
     func fetchWatchlist() throws -> [WatchlistEntity] {
         let request = NSFetchRequest<WatchlistEntity>(entityName: "WatchlistEntity")
 
         do {
-            print("fetching")
             let watchlist = try container.viewContext.fetch(request)
             return watchlist
         } catch {

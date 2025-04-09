@@ -14,10 +14,17 @@ class WatchlistViewModel {
 
     init(coreDataService: CoreDataService = CoreDataService()) {
         self.coreDataService = coreDataService
+        getWatchlist()
     }
 
     func addToWatchlist(movie: Movie) {
         coreDataService.addToWatchList(movie: movie)
+        getWatchlist()
+    }
+
+    func removeFromWatchlist(indexSet: IndexSet) {
+        coreDataService.deleteWatchlistItem(indexSet: indexSet, entityList: watchlist)
+        getWatchlist()
     }
 
     func getWatchlist() {
