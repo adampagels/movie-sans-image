@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var movieViewModel: MovieViewModel = .init(apiService: APIService())
-    @Environment(WatchlistViewModel.self) private var watchlistViewModel
+    @State var watchlistViewModel: WatchlistViewModel
 
     var body: some View {
         List {
@@ -34,5 +34,5 @@ struct HomeView: View {
 }
 
 #Preview() {
-    HomeView()
+    HomeView(watchlistViewModel: WatchlistViewModel())
 }

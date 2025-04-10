@@ -8,20 +8,35 @@
 import SwiftUI
 
 struct WatchlistView: View {
-    @Environment(WatchlistViewModel.self) private var watchlistViewModel
+    @Bindable var watchlistViewModel: WatchlistViewModel
 
     var body: some View {
         Text("My List View")
         List {
             ForEach(watchlistViewModel.watchlist) { watchlistItem in
-                Text(watchlistItem.title ?? "")
-                    .listRowSeparator(.hidden)
+                HStack {
+                    Button(action: {
+                        watchlistViewModel.markAsWatched(entity: watchlistItem)
+                    }) {
+                        Image(systemName: watchlistItem.isWatched ? "circle.fill" : "circle")
+                            .imageScale(.large)
+                    }
+                    .buttonStyle(.plain)
+
+                    Text(watchlistItem.title ?? "")
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                        .padding()
+                        .border(Color.purple, width: 4)
+                        .strikethrough(watchlistItem.isWatched)
+                }
+                .listRowSeparator(.hidden)
             }
             .onDelete(perform: watchlistViewModel.removeFromWatchlist)
         }
+        .listStyle(PlainListStyle())
     }
 }
 
 #Preview {
-    WatchlistView()
+    WatchlistView(watchlistViewModel: WatchlistViewModel())
 }

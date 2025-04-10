@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct MainView: View {
+    @State var watchlistViewModel = WatchlistViewModel()
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house.fill") {
-                HomeView()
+                HomeView(watchlistViewModel: watchlistViewModel)
             }
 
             Tab("Home", systemImage: "list.bullet") {
-                WatchlistView()
+                WatchlistView(watchlistViewModel: watchlistViewModel)
             }
         }
     }

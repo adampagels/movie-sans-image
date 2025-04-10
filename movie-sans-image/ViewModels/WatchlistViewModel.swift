@@ -35,4 +35,9 @@ class WatchlistViewModel {
             print("this is erroring", error)
         }
     }
+
+    func markAsWatched(entity: WatchlistEntity) {
+        coreDataService.toggleWatched(entity: entity)
+        getWatchlist()
+    }
 }

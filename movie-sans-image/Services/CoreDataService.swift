@@ -37,6 +37,7 @@ class CoreDataService: CoreDataServiceProtocol {
         newMovie.video = movie.video
         newMovie.vote_average = movie.vote_average ?? 0.0
         newMovie.vote_count = Int16(movie.vote_count ?? 0)
+        newMovie.isWatched = false
 //        newMovie.genre_ids = movie.genre_ids
 
         saveData()
@@ -60,5 +61,10 @@ class CoreDataService: CoreDataServiceProtocol {
             print("error fetching watchlist: \(error)")
             throw error
         }
+    }
+
+    func toggleWatched(entity: WatchlistEntity) {
+        entity.isWatched.toggle()
+        saveData()
     }
 }
