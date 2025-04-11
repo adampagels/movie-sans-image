@@ -22,6 +22,7 @@ struct Movie: Identifiable, Codable {
     let video: Bool
     let vote_average: Double?
     let vote_count: Int?
+    var isInWatchlist: Bool?
 }
 
 struct APIResponse: Codable {

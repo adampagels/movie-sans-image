@@ -17,8 +17,11 @@ struct HomeView: View {
                 HStack {
                     Text(movie.title)
                         .frame(maxWidth: .infinity, alignment: .topLeading)
-                    Button("add") {
-                        watchlistViewModel.addToWatchlist(movie: movie)
+                    Button(movie.isInWatchlist ?? false ? "Added" : "add") {
+                        if movie.isInWatchlist == false {
+                            watchlistViewModel.addToWatchlist(movie: movie)
+                        }
+                        movieViewModel.toggleWatchlistStatus(movieID: movie.id)
                     }
                 }
                 .listRowSeparator(.hidden)
@@ -26,9 +29,11 @@ struct HomeView: View {
                 .border(Color.purple, width: 4)
             }
         }
+        .buttonStyle(BorderlessButtonStyle())
         .listStyle(PlainListStyle())
         .task {
             await movieViewModel.loadPopularMovies()
+            movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
         }
     }
 }

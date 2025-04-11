@@ -17,6 +17,21 @@ class MovieViewModel {
         self.apiService = apiService
     }
 
+    func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
+        latestMovies = latestMovies.map { mov in
+            var movieToBeToggled = mov
+            movieToBeToggled.isInWatchlist = watchlist.contains(where: { $0.id == movieToBeToggled.id })
+            return movieToBeToggled
+        }
+    }
+
+    func toggleWatchlistStatus(movieID: Int) {
+        guard let index = latestMovies.firstIndex(where: { $0.id == movieID }) else { return }
+        if latestMovies[index].isInWatchlist == false {
+            latestMovies[index].isInWatchlist = true
+        }
+    }
+
     @MainActor
     func loadPopularMovies() async {
         do {
