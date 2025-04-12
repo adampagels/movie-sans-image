@@ -12,6 +12,7 @@ class MovieViewModel {
     private let apiService: APIServiceProtocol
     var latestMovies: [Movie] = []
     var networkError: String = ""
+    var selectedMovie: Movie?
 
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService

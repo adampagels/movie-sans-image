@@ -17,7 +17,11 @@ struct HomeView: View {
                 HStack {
                     Text(movie.title)
                         .frame(maxWidth: .infinity, alignment: .topLeading)
+                        .onTapGesture {
+                            movieViewModel.selectedMovie = movie
+                        }
                     Button(movie.isInWatchlist ?? false ? "Added" : "add") {
+                        print(movie)
                         if movie.isInWatchlist == false {
                             watchlistViewModel.addToWatchlist(movie: movie)
                         }
@@ -34,6 +38,9 @@ struct HomeView: View {
         .task {
             await movieViewModel.loadPopularMovies()
             movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+        }
+        .sheet(item: $movieViewModel.selectedMovie) { movie in
+            DetailView(movie: movie)
         }
     }
 }
