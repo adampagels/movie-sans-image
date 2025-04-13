@@ -21,11 +21,8 @@ struct HomeView: View {
                             movieViewModel.selectedMovie = movie
                         }
                     Button(movie.isInWatchlist ?? false ? "Added" : "add") {
-                        print(movie)
-                        if movie.isInWatchlist == false {
-                            watchlistViewModel.addToWatchlist(movie: movie)
-                        }
                         movieViewModel.toggleWatchlistStatus(movieID: movie.id)
+                        watchlistViewModel.persistWatchlistChange(movie: movie)
                     }
                 }
                 .listRowSeparator(.hidden)

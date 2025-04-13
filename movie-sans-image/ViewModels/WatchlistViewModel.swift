@@ -22,9 +22,17 @@ class WatchlistViewModel {
         getWatchlist()
     }
 
-    func removeFromWatchlist(indexSet: IndexSet) {
-        coreDataService.deleteWatchlistItem(indexSet: indexSet, entityList: watchlist)
+    func removeFromWatchlist(movieID: Int) {
+        coreDataService.deleteWatchlistItem(movieID: movieID, entityList: watchlist)
         getWatchlist()
+    }
+
+    func persistWatchlistChange(movie: Movie) {
+        if movie.isInWatchlist == true {
+            removeFromWatchlist(movieID: movie.id)
+        } else {
+            addToWatchlist(movie: movie)
+        }
     }
 
     func getWatchlist() {

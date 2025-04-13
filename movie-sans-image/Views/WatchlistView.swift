@@ -29,9 +29,15 @@ struct WatchlistView: View {
                         .border(Color.purple, width: 4)
                         .strikethrough(watchlistItem.isWatched)
                 }
+                .swipeActions(allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        watchlistViewModel.removeFromWatchlist(movieID: Int(watchlistItem.id))
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
                 .listRowSeparator(.hidden)
             }
-            .onDelete(perform: watchlistViewModel.removeFromWatchlist)
         }
         .listStyle(PlainListStyle())
     }

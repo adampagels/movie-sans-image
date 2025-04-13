@@ -30,6 +30,8 @@ class MovieViewModel {
         guard let index = latestMovies.firstIndex(where: { $0.id == movieID }) else { return }
         if latestMovies[index].isInWatchlist == false {
             latestMovies[index].isInWatchlist = true
+        } else {
+            latestMovies[index].isInWatchlist = false
         }
     }
 

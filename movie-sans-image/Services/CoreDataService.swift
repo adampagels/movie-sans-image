@@ -43,8 +43,8 @@ class CoreDataService: CoreDataServiceProtocol {
         saveData()
     }
 
-    func deleteWatchlistItem(indexSet: IndexSet, entityList: [WatchlistEntity]) {
-        guard let index = indexSet.first else { return }
+    func deleteWatchlistItem(movieID: Int, entityList: [WatchlistEntity]) {
+        guard let index = entityList.firstIndex(where: { $0.id == movieID }) else { return }
         let entity = entityList[index]
 
         container.viewContext.delete(entity)
