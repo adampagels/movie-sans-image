@@ -14,20 +14,33 @@ struct HomeView: View {
     var body: some View {
         List {
             ForEach(movieViewModel.latestMovies) { movie in
-                HStack {
-                    Text(movie.title)
-                        .frame(maxWidth: .infinity, alignment: .topLeading)
-                        .onTapGesture {
-                            movieViewModel.selectedMovie = movie
+                NeubrutalContainerView {
+                    HStack {
+                        Text(movie.title)
+                            .padding()
+
+                        Spacer()
+
+                        Button {
+                            withAnimation {
+                                movieViewModel.toggleWatchlistStatus(movieID: movie.id)
+                            }
+                            watchlistViewModel.persistWatchlistChange(movie: movie)
                         }
-                    Button(movie.isInWatchlist ?? false ? "Added" : "add") {
-                        movieViewModel.toggleWatchlistStatus(movieID: movie.id)
-                        watchlistViewModel.persistWatchlistChange(movie: movie)
+                        label: {
+                            Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
+                                .foregroundStyle(.black)
+                                .fontWeight(.bold)
+                        }
+                        .padding()
+                        .contentTransition(.symbolEffect(.replace))
+                    }
+                    .onTapGesture {
+                        movieViewModel.selectedMovie = movie
                     }
                 }
+                .padding(.bottom)
                 .listRowSeparator(.hidden)
-                .padding()
-                .border(Color.purple, width: 4)
             }
         }
         .buttonStyle(BorderlessButtonStyle())
