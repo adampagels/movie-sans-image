@@ -10,7 +10,14 @@ import SwiftUI
 struct DetailView: View {
     var movie: Movie
     var body: some View {
-        Text(movie.title)
+        VStack {
+            Text(movie.title)
+                .font(.largeTitle)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
+            Text(movie.overview ?? "")
+                .font(.headline)
+        }
+        .padding()
     }
 }
 
