@@ -15,7 +15,7 @@ struct MainView: View {
                 HomeView(watchlistViewModel: watchlistViewModel)
             }
 
-            Tab("Home", systemImage: "list.bullet") {
+            Tab("Watchlist", systemImage: "list.bullet") {
                 WatchlistView(watchlistViewModel: watchlistViewModel)
             }
         }
