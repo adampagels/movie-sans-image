@@ -13,7 +13,7 @@ struct WatchlistView: View {
     var body: some View {
         List {
             ForEach(watchlistViewModel.watchlist) { watchlistItem in
-                NeubrutalContainerView {
+                NeubrutalContainerView(backgroundColour: .gray) {
                     HStack {
                         Button(action: {
                             watchlistViewModel.markAsWatched(entity: watchlistItem)

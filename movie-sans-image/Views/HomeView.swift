@@ -23,9 +23,16 @@ struct HomeView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 16) {
                     ForEach(MovieListCategory.allCases, id: \.rawValue) { category in
-                        NeubrutalContainerView {
+                        NeubrutalContainerView(backgroundColour: movieViewModel
+                            .selectedCategory == category ? .blue : .gray)
+                        {
                             Text(category.rawValue)
                                 .padding()
+                        }
+                        .onTapGesture {
+                            withAnimation {
+                                movieViewModel.selectCategory(category: category)
+                            }
                         }
                         .fixedSize()
                     }
@@ -37,7 +44,7 @@ struct HomeView: View {
             .scrollIndicators(.hidden)
 
             ForEach(movieViewModel.latestMovies) { movie in
-                NeubrutalContainerView {
+                NeubrutalContainerView(backgroundColour: .gray) {
                     HStack {
                         Text(movie.title)
                             .padding()

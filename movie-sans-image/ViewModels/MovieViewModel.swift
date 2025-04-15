@@ -13,9 +13,14 @@ class MovieViewModel {
     var latestMovies: [Movie] = []
     var networkError: String = ""
     var selectedMovie: Movie?
+    var selectedCategory: MovieListCategory = .popular
 
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService
+    }
+
+    func selectCategory(category: MovieListCategory) {
+        selectedCategory = category
     }
 
     func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
