@@ -17,70 +17,89 @@ enum MovieListCategory: String, CaseIterable {
 struct HomeView: View {
     @State private var movieViewModel: MovieViewModel = .init(apiService: APIService())
     @State var watchlistViewModel: WatchlistViewModel
+    @AppStorage("theme") var theme: Theme = .system
 
     var body: some View {
-        List {
-            ScrollView(.horizontal) {
-                HStack(spacing: 16) {
-                    ForEach(MovieListCategory.allCases, id: \.rawValue) { category in
-                        NeubrutalContainerView(backgroundColour: movieViewModel
-                            .selectedCategory == category ? .blue : .gray)
-                        {
-                            Text(category.rawValue)
+        NavigationStack {
+            List {
+                ScrollView(.horizontal) {
+                    HStack(spacing: 16) {
+                        ForEach(MovieListCategory.allCases, id: \.rawValue) { category in
+                            NeubrutalContainerView(backgroundColour: movieViewModel
+                                .selectedCategory == category ? .blue : .gray)
+                            {
+                                Text(category.rawValue)
+                                    .padding()
+                            }
+                            .onTapGesture {
+                                withAnimation {
+                                    movieViewModel.selectCategory(category: category)
+                                }
+                            }
+                            .fixedSize()
+                        }
+                    }
+                    .padding([.trailing, .leading], 3)
+                    .padding(.vertical)
+                    .listRowSeparator(.hidden)
+                }
+                .scrollIndicators(.hidden)
+                .listRowSeparator(.hidden)
+
+                ForEach(movieViewModel.latestMovies) { movie in
+                    NeubrutalContainerView(backgroundColour: .gray) {
+                        HStack {
+                            Text(movie.title)
                                 .padding()
+
+                            Spacer()
+
+                            Button {
+                                withAnimation {
+                                    movieViewModel.toggleWatchlistStatus(movieID: movie.id)
+                                }
+                                watchlistViewModel.persistWatchlistChange(movie: movie)
+                            }
+                            label: {
+                                Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
+                                    .foregroundStyle(.black)
+                                    .fontWeight(.bold)
+                            }
+                            .padding()
+                            .contentTransition(.symbolEffect(.replace))
                         }
                         .onTapGesture {
-                            withAnimation {
-                                movieViewModel.selectCategory(category: category)
-                            }
+                            movieViewModel.selectedMovie = movie
                         }
-                        .fixedSize()
                     }
+                    .padding(.bottom)
+                    .listRowSeparator(.hidden)
                 }
-                .padding([.trailing, .leading], 3)
-                .padding(.vertical)
-                .listRowSeparator(.hidden)
             }
-            .scrollIndicators(.hidden)
-
-            ForEach(movieViewModel.latestMovies) { movie in
-                NeubrutalContainerView(backgroundColour: .gray) {
-                    HStack {
-                        Text(movie.title)
-                            .padding()
-
-                        Spacer()
-
-                        Button {
-                            withAnimation {
-                                movieViewModel.toggleWatchlistStatus(movieID: movie.id)
-                            }
-                            watchlistViewModel.persistWatchlistChange(movie: movie)
-                        }
-                        label: {
-                            Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
-                                .foregroundStyle(.black)
-                                .fontWeight(.bold)
-                        }
-                        .padding()
-                        .contentTransition(.symbolEffect(.replace))
-                    }
-                    .onTapGesture {
-                        movieViewModel.selectedMovie = movie
+            .buttonStyle(BorderlessButtonStyle())
+            .listStyle(PlainListStyle())
+            .task {
+                await movieViewModel.loadPopularMovies()
+                movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+            }
+            .sheet(item: $movieViewModel.selectedMovie) { movie in
+                DetailView(movie: movie)
+            }
+            .toolbar {
+                NeubrutalContainerView(backgroundColour: theme == .dark ? .black : .blue) {
+                    withAnimation {
+                        Image(systemName: theme.iconName)
+                            .padding(7)
+                            .foregroundStyle(theme == .dark ? .white : .yellow)
+                            .fixedSize()
+                            .imageScale(.small)
                     }
                 }
                 .padding(.bottom)
-                .listRowSeparator(.hidden)
+                .onTapGesture {
+                    theme = theme == .dark ? .light : .dark
+                }
             }
-        }
-        .buttonStyle(BorderlessButtonStyle())
-        .listStyle(PlainListStyle())
-        .task {
-            await movieViewModel.loadPopularMovies()
-            movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
-        }
-        .sheet(item: $movieViewModel.selectedMovie) { movie in
-            DetailView(movie: movie)
         }
     }
 }

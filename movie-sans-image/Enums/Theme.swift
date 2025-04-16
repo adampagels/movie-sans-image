@@ -24,13 +24,13 @@ enum Theme: String, CaseIterable, Identifiable {
 
     var iconName: String {
         switch self {
-        case .system: return "moon.circle.fill"
+        case .system: return "circle.righthalf.filled"
         case .light: return "sun.max.fill"
-        case .dark: return "moon.stars.fill"
+        case .dark: return "moon.fill"
         }
     }
 
-    var displayName: String {
+    var iconColor: String {
         switch self {
         case .system: return "Automatic"
         case .light: return "Light"
