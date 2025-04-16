@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct movie_sans_imageApp: App {
+    @AppStorage("theme") private var theme: Theme = .system
     var body: some Scene {
         WindowGroup {
             MainView()
+                .preferredColorScheme(theme.colorScheme)
         }
     }
 }
