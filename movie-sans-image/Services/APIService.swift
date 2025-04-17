@@ -15,9 +15,38 @@ class APIService: APIServiceProtocol {
     }
 
     func fetchMovies(by category: MovieListCategory) async throws -> [Movie] {
-        let latestMoviesURL = baseURL.appendingPathComponent("/movie/\(category.categoryInSnakeCase)")
+        let fetchMoviesURL = baseURL.appendingPathComponent("/movie/\(category.categoryInSnakeCase)")
 
-        var request = URLRequest(url: latestMoviesURL)
+        var request = URLRequest(url: fetchMoviesURL)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = [
+            "accept": "application/json",
+            "Authorization": "Bearer \(Config.apiKey)",
+        ]
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            print("error", response)
+            throw APIError.invalidResponse
+        }
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+            let decodedResponse = try decoder.decode(APIResponse.self, from: data)
+            return decodedResponse.results
+        } catch {
+            print(error)
+            throw APIError.invalidData
+        }
+    }
+
+    func searchMovies(by text: String) async throws -> [Movie] {
+        var searchMoviesURL = baseURL.appendingPathComponent("/search/movie")
+        searchMoviesURL.append(queryItems: [URLQueryItem(name: "query", value: text)])
+
+        var request = URLRequest(url: searchMoviesURL)
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = [
             "accept": "application/json",

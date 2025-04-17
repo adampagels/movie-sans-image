@@ -15,6 +15,10 @@ struct MainView: View {
                 HomeView(watchlistViewModel: watchlistViewModel)
             }
 
+            Tab("Search", systemImage: "magnifyingglass") {
+                SearchView(watchlistViewModel: watchlistViewModel)
+            }
+
             Tab("Watchlist", systemImage: "list.bullet") {
                 WatchlistView(watchlistViewModel: watchlistViewModel)
             }
