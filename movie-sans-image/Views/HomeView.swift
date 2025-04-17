@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-enum MovieListCategory: String, CaseIterable {
-    case popular = "Popular"
-    case nowPlaying = "Now Playing"
-    case topRated = "Top Rated"
-    case upcoming = "Upcoming"
-
-    var categoryInSnakeCase: String {
-        switch self {
-        case .popular: "popular"
-        case .nowPlaying: "now_playing"
-        case .topRated: "top_rated"
-        case .upcoming: "upcoming"
-        }
-    }
-}
-
 struct HomeView: View {
     @State private var movieViewModel: MovieViewModel = .init(apiService: APIService())
     @State var watchlistViewModel: WatchlistViewModel
