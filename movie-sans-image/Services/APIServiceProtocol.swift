@@ -6,5 +6,5 @@
 //
 
 protocol APIServiceProtocol {
-    func fetchPopularMovies() async throws -> [Movie]
+    func fetchMovies(by: MovieListCategory) async throws -> [Movie]
 }

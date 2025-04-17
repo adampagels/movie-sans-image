@@ -12,6 +12,15 @@ enum MovieListCategory: String, CaseIterable {
     case nowPlaying = "Now Playing"
     case topRated = "Top Rated"
     case upcoming = "Upcoming"
+
+    var categoryInSnakeCase: String {
+        switch self {
+        case .popular: "popular"
+        case .nowPlaying: "now_playing"
+        case .topRated: "top_rated"
+        case .upcoming: "upcoming"
+        }
+    }
 }
 
 struct HomeView: View {
@@ -35,18 +44,22 @@ struct HomeView: View {
                                 withAnimation {
                                     movieViewModel.selectCategory(category: category)
                                 }
+                                Task {
+                                    await movieViewModel.getMovies()
+                                    movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+                                }
                             }
                             .fixedSize()
                         }
                     }
-                    .padding([.trailing, .leading], 3)
                     .padding(.vertical)
                     .listRowSeparator(.hidden)
                 }
+                .scrollClipDisabled()
                 .scrollIndicators(.hidden)
                 .listRowSeparator(.hidden)
 
-                ForEach(movieViewModel.latestMovies) { movie in
+                ForEach(movieViewModel.movies) { movie in
                     NeubrutalContainerView(backgroundColour: .gray) {
                         HStack {
                             Text(movie.title)
@@ -78,8 +91,9 @@ struct HomeView: View {
             }
             .buttonStyle(BorderlessButtonStyle())
             .listStyle(PlainListStyle())
+            .scrollIndicators(.hidden)
             .task {
-                await movieViewModel.loadPopularMovies()
+                await movieViewModel.getMovies()
                 movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
             }
             .sheet(item: $movieViewModel.selectedMovie) { movie in

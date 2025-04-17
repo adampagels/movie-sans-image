@@ -10,7 +10,7 @@ import SwiftUI
 @Observable
 class MovieViewModel {
     private let apiService: APIServiceProtocol
-    var latestMovies: [Movie] = []
+    var movies: [Movie] = []
     var networkError: String = ""
     var selectedMovie: Movie?
     var selectedCategory: MovieListCategory = .popular
@@ -24,7 +24,7 @@ class MovieViewModel {
     }
 
     func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
-        latestMovies = latestMovies.map { mov in
+        movies = movies.map { mov in
             var movieToBeToggled = mov
             movieToBeToggled.isInWatchlist = watchlist.contains(where: { $0.id == movieToBeToggled.id })
             return movieToBeToggled
@@ -32,18 +32,18 @@ class MovieViewModel {
     }
 
     func toggleWatchlistStatus(movieID: Int) {
-        guard let index = latestMovies.firstIndex(where: { $0.id == movieID }) else { return }
-        if latestMovies[index].isInWatchlist == false {
-            latestMovies[index].isInWatchlist = true
+        guard let index = movies.firstIndex(where: { $0.id == movieID }) else { return }
+        if movies[index].isInWatchlist == false {
+            movies[index].isInWatchlist = true
         } else {
-            latestMovies[index].isInWatchlist = false
+            movies[index].isInWatchlist = false
         }
     }
 
     @MainActor
-    func loadPopularMovies() async {
+    func getMovies() async {
         do {
-            latestMovies = try await apiService.fetchPopularMovies()
+            movies = try await apiService.fetchMovies(by: selectedCategory)
         } catch let error as APIError {
             networkError = error.localizedDescription
         } catch {

@@ -14,8 +14,8 @@ class APIService: APIServiceProtocol {
         self.baseURL = baseURL
     }
 
-    func fetchPopularMovies() async throws -> [Movie] {
-        let latestMoviesURL = baseURL.appendingPathComponent("/movie/popular")
+    func fetchMovies(by category: MovieListCategory) async throws -> [Movie] {
+        let latestMoviesURL = baseURL.appendingPathComponent("/movie/\(category.categoryInSnakeCase)")
 
         var request = URLRequest(url: latestMoviesURL)
         request.httpMethod = "GET"
