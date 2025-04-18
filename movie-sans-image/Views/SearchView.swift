@@ -72,5 +72,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView(watchlistViewModel: WatchlistViewModel())
+    SearchView(watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()))
 }

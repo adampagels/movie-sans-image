@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct MainView: View {
-    @State var watchlistViewModel = WatchlistViewModel()
+    private let apiService = APIService()
+    private let coreDataService = CoreDataService()
+    @State var watchlistViewModel: WatchlistViewModel
+    
+    init() {
+        _watchlistViewModel = State(wrappedValue: WatchlistViewModel(coreDataService: coreDataService))
+    }
+
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house.fill") {
-                HomeView(watchlistViewModel: watchlistViewModel)
+                HomeView(
+                    movieViewModel: MovieViewModel(apiService: apiService),
+                    watchlistViewModel: watchlistViewModel
+                )
             }
 
             Tab("Search", systemImage: "magnifyingglass") {

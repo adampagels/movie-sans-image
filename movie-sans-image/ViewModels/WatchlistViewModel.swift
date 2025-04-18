@@ -12,7 +12,7 @@ class WatchlistViewModel {
     private let coreDataService: CoreDataService
     var watchlist: [WatchlistEntity] = []
 
-    init(coreDataService: CoreDataService = CoreDataService()) {
+    init(coreDataService: CoreDataService) {
         self.coreDataService = coreDataService
         getWatchlist()
     }

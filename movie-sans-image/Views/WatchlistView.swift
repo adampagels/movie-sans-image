@@ -46,5 +46,5 @@ struct WatchlistView: View {
 }
 
 #Preview {
-    WatchlistView(watchlistViewModel: WatchlistViewModel())
+    WatchlistView(watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()))
 }
