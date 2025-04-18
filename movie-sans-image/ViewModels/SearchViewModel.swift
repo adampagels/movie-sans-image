@@ -12,8 +12,11 @@ class SearchViewModel {
     private let apiService: APIServiceProtocol
     var searchText: String = ""
     var searchedMovies: [Movie] = []
-
     var networkError: String = ""
+
+    var shouldShowGenreList: Bool {
+        searchedMovies.isEmpty
+    }
 
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService

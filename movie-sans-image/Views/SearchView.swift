@@ -32,6 +32,29 @@ struct SearchView: View {
             .padding()
 
             List {
+                if searchViewModel.shouldShowGenreList {
+                    Text("Search by genres")
+                        .fontWeight(.bold)
+                        .font(.title2)
+                    LazyVGrid(
+                        columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)],
+                        spacing: 22
+                    ) {
+                        ForEach(MovieGenre.allCases, id: \.rawValue) { genre in
+                            NeubrutalContainerView(backgroundColour: genre.backgroundColor) {
+                                Text(genre.rawValue)
+                                    .padding()
+                                    .padding(.vertical)
+                                    .fixedSize()
+                            }
+                            .onTapGesture {
+                                print("genre pressed")
+                            }
+                        }
+                    }
+                    .listRowSeparator(.hidden)
+                }
+
                 ForEach(searchViewModel.searchedMovies) { movie in
                     NeubrutalContainerView(backgroundColour: .gray) {
                         HStack {
@@ -63,7 +86,6 @@ struct SearchView: View {
                     .listRowSeparator(.hidden)
                 }
             }
-            .padding(.top)
             .buttonStyle(BorderlessButtonStyle())
             .listStyle(PlainListStyle())
             .scrollIndicators(.hidden)
