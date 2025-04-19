@@ -8,4 +8,5 @@
 protocol APIServiceProtocol {
     func fetchMovies(by: MovieListCategory) async throws -> [Movie]
     func searchMovies(by: String) async throws -> [Movie]
+    func discoverMovies(with: String) async throws -> [Movie]
 }

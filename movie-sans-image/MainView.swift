@@ -11,7 +11,8 @@ struct MainView: View {
     private let apiService = APIService()
     private let coreDataService = CoreDataService()
     @State var watchlistViewModel: WatchlistViewModel
-    
+    @State var router = NavigationRouter()
+
     init() {
         _watchlistViewModel = State(wrappedValue: WatchlistViewModel(coreDataService: coreDataService))
     }
@@ -26,7 +27,16 @@ struct MainView: View {
             }
 
             Tab("Search", systemImage: "magnifyingglass") {
-                SearchView(watchlistViewModel: watchlistViewModel)
+                NavigationStack(path: $router.path) {
+                    SearchView(watchlistViewModel: watchlistViewModel, router: router)
+                        .navigationDestination(for: Route.self) { route in
+                            switch route {
+                            case let .genre(genre):
+                                GenreView(genre: genre, genreViewModel: GenreViewModel(apiService: apiService))
+                            }
+                        }
+                }
+                .tint(.primary)
             }
 
             Tab("Watchlist", systemImage: "list.bullet") {

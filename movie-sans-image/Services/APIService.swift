@@ -14,10 +14,8 @@ class APIService: APIServiceProtocol {
         self.baseURL = baseURL
     }
 
-    func fetchMovies(by category: MovieListCategory) async throws -> [Movie] {
-        let fetchMoviesURL = baseURL.appendingPathComponent("/movie/\(category.categoryInSnakeCase)")
-
-        var request = URLRequest(url: fetchMoviesURL)
+    private func requestMovies(from url: URL) async throws -> [Movie] {
+        var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = [
             "accept": "application/json",
@@ -27,48 +25,32 @@ class APIService: APIServiceProtocol {
         let (data, response) = try await URLSession.shared.data(for: request)
 
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-            print("error", response)
             throw APIError.invalidResponse
         }
-        do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
 
-            let decodedResponse = try decoder.decode(APIResponse.self, from: data)
-            return decodedResponse.results
-        } catch {
-            print(error)
-            throw APIError.invalidData
-        }
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let decodedResponse = try decoder.decode(APIResponse.self, from: data)
+        return decodedResponse.results
+    }
+
+    func fetchMovies(by category: MovieListCategory) async throws -> [Movie] {
+        let fetchMoviesURL = baseURL.appendingPathComponent("/movie/\(category.categoryInSnakeCase)")
+        return try await requestMovies(from: fetchMoviesURL)
     }
 
     func searchMovies(by text: String) async throws -> [Movie] {
         var searchMoviesURL = baseURL.appendingPathComponent("/search/movie")
         searchMoviesURL.append(queryItems: [URLQueryItem(name: "query", value: text)])
 
-        var request = URLRequest(url: searchMoviesURL)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = [
-            "accept": "application/json",
-            "Authorization": "Bearer \(Config.apiKey)",
-        ]
+        return try await requestMovies(from: searchMoviesURL)
+    }
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+    func discoverMovies(with genreID: String) async throws -> [Movie] {
+        var discoverMoviesURL = baseURL.appendingPathComponent("/discover/movie")
+        discoverMoviesURL.append(queryItems: [URLQueryItem(name: "with_genres", value: genreID)])
 
-        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-            print("error", response)
-            throw APIError.invalidResponse
-        }
-        do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-            let decodedResponse = try decoder.decode(APIResponse.self, from: data)
-            return decodedResponse.results
-        } catch {
-            print(error)
-            throw APIError.invalidData
-        }
+        return try await requestMovies(from: discoverMoviesURL)
     }
 }
 

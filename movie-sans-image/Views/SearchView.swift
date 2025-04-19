@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchView: View {
     @State var watchlistViewModel: WatchlistViewModel
     @State private var searchViewModel: SearchViewModel = .init(apiService: APIService())
+    @State var router: NavigationRouter
 
     var body: some View {
         VStack {
@@ -48,7 +49,7 @@ struct SearchView: View {
                                     .fixedSize()
                             }
                             .onTapGesture {
-                                print("genre pressed")
+                                router.push(Route.genre(genre))
                             }
                         }
                     }
@@ -94,5 +95,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView(watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()))
+    SearchView(watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()), router: NavigationRouter())
 }
