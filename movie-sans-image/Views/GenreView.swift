@@ -44,8 +44,6 @@ struct GenreView: View {
             }
         }
         .task {
-            // NOTE: temporary UI fix for tab flashing when list populates
-            try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
             await genreViewModel.getMoviesByGenreID(genreID: genre.id)
         }
         .buttonStyle(BorderlessButtonStyle())

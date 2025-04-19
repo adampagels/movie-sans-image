@@ -15,6 +15,13 @@ struct MainView: View {
 
     init() {
         _watchlistViewModel = State(wrappedValue: WatchlistViewModel(coreDataService: coreDataService))
+
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = UIColor.systemBackground
+
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
 
     var body: some View {
