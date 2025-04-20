@@ -10,22 +10,33 @@ import SwiftUI
 @Observable
 class SearchViewModel {
     private let apiService: APIServiceProtocol
+    private let movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol
     var searchText: String = ""
-    var searchedMovies: [Movie] = []
+    var movies: [Movie] = []
     var networkError: String = ""
+    var selectedMovie: Movie?
 
     var shouldShowGenreList: Bool {
-        searchedMovies.isEmpty
+        movies.isEmpty
     }
 
-    init(apiService: APIServiceProtocol) {
+    init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusService) {
         self.apiService = apiService
+        self.movieWatchlistStatusService = movieWatchlistStatusService
+    }
+
+    func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
+        movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
+    }
+
+    func toggleWatchlistStatus(movieID: Int) {
+        movies = movieWatchlistStatusService.toggleWatchlistFlag(for: movieID, movies: movies)
     }
 
     @MainActor
     func searchMovies() async {
         do {
-            searchedMovies = try await apiService.searchMovies(by: searchText)
+            movies = try await apiService.searchMovies(by: searchText)
         } catch let error as APIError {
             networkError = error.localizedDescription
         } catch {

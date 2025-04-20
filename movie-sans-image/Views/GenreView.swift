@@ -9,7 +9,8 @@ import SwiftUI
 
 struct GenreView: View {
     let genre: MovieGenre
-    var genreViewModel: GenreViewModel
+    var watchlistViewModel: WatchlistViewModel
+    @State var genreViewModel: GenreViewModel
     var body: some View {
         List {
             ForEach(genreViewModel.movies) { movie in
@@ -21,11 +22,10 @@ struct GenreView: View {
                         Spacer()
 
                         Button {
-                            //                            withAnimation {
-                            //                                movieViewModel.toggleWatchlistStatus(movieID: movie.id)
-                            //                            }
-                            //                            watchlistViewModel.persistWatchlistChange(movie: movie)
-                            print("button pressed")
+                            withAnimation {
+                                genreViewModel.toggleWatchlistStatus(movieID: movie.id)
+                            }
+                            watchlistViewModel.persistWatchlistChange(movie: movie)
                         }
                         label: {
                             Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
@@ -35,9 +35,9 @@ struct GenreView: View {
                         .padding()
                         .contentTransition(.symbolEffect(.replace))
                     }
-                    //                    .onTapGesture {
-                    //                        movieViewModel.selectedMovie = movie
-                    //                    }
+                    .onTapGesture {
+                        genreViewModel.selectedMovie = movie
+                    }
                 }
                 .padding(.bottom)
                 .listRowSeparator(.hidden)
@@ -45,6 +45,7 @@ struct GenreView: View {
         }
         .task {
             await genreViewModel.getMoviesByGenreID(genreID: genre.id)
+            genreViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
         }
         .buttonStyle(BorderlessButtonStyle())
         .listStyle(PlainListStyle())
@@ -52,9 +53,19 @@ struct GenreView: View {
         .navigationTitle(genre.rawValue)
         .navigationBarTitleDisplayMode(.large)
         .toolbarRole(.editor)
+        .sheet(item: $genreViewModel.selectedMovie) { movie in
+            DetailView(movie: movie)
+        }
     }
 }
 
 #Preview {
-    GenreView(genre: .action, genreViewModel: GenreViewModel(apiService: APIService()))
+    GenreView(
+        genre: .action,
+        watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()),
+        genreViewModel: GenreViewModel(
+            apiService: APIService(),
+            movieWatchlistStatusService: MovieWatchlistStatusService()
+        )
+    )
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State var movieViewModel: MovieViewModel
-    @State var watchlistViewModel: WatchlistViewModel
+    var watchlistViewModel: WatchlistViewModel
     @AppStorage("theme") var theme: Theme = .system
 
     var body: some View {
@@ -104,7 +104,10 @@ struct HomeView: View {
 
 #Preview() {
     HomeView(
-        movieViewModel: MovieViewModel(apiService: APIService()),
+        movieViewModel: MovieViewModel(
+            apiService: APIService(),
+            movieWatchlistStatusService: MovieWatchlistStatusService()
+        ),
         watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService())
     )
 }

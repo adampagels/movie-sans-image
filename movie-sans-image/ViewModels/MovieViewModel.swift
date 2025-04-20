@@ -10,13 +10,15 @@ import SwiftUI
 @Observable
 class MovieViewModel {
     private let apiService: APIServiceProtocol
+    private let movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol
     var movies: [Movie] = []
     var networkError: String = ""
     var selectedMovie: Movie?
     var selectedCategory: MovieListCategory = .popular
 
-    init(apiService: APIServiceProtocol) {
+    init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol) {
         self.apiService = apiService
+        self.movieWatchlistStatusService = movieWatchlistStatusService
     }
 
     func selectCategory(category: MovieListCategory) {
@@ -24,20 +26,11 @@ class MovieViewModel {
     }
 
     func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
-        movies = movies.map { mov in
-            var movieToBeToggled = mov
-            movieToBeToggled.isInWatchlist = watchlist.contains(where: { $0.id == movieToBeToggled.id })
-            return movieToBeToggled
-        }
+        movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
     }
 
     func toggleWatchlistStatus(movieID: Int) {
-        guard let index = movies.firstIndex(where: { $0.id == movieID }) else { return }
-        if movies[index].isInWatchlist == false {
-            movies[index].isInWatchlist = true
-        } else {
-            movies[index].isInWatchlist = false
-        }
+        movies = movieWatchlistStatusService.toggleWatchlistFlag(for: movieID, movies: movies)
     }
 
     @MainActor

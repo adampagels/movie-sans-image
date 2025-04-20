@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SearchView: View {
-    @State var watchlistViewModel: WatchlistViewModel
-    @State private var searchViewModel: SearchViewModel = .init(apiService: APIService())
+    var watchlistViewModel: WatchlistViewModel
+    @State var searchViewModel: SearchViewModel
     @State var router: NavigationRouter
 
     var body: some View {
@@ -22,6 +22,7 @@ struct SearchView: View {
                     .onSubmit {
                         Task {
                             await searchViewModel.searchMovies()
+                            searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                         }
                     }
             }
@@ -56,7 +57,7 @@ struct SearchView: View {
                     .listRowSeparator(.hidden)
                 }
 
-                ForEach(searchViewModel.searchedMovies) { movie in
+                ForEach(searchViewModel.movies) { movie in
                     NeubrutalContainerView(backgroundColour: .gray) {
                         HStack {
                             Text(movie.title)
@@ -65,11 +66,10 @@ struct SearchView: View {
                             Spacer()
 
                             Button {
-                                //                            withAnimation {
-                                //                                movieViewModel.toggleWatchlistStatus(movieID: movie.id)
-                                //                            }
-                                //                            watchlistViewModel.persistWatchlistChange(movie: movie)
-                                print("button pressed")
+                                withAnimation {
+                                    searchViewModel.toggleWatchlistStatus(movieID: movie.id)
+                                }
+                                watchlistViewModel.persistWatchlistChange(movie: movie)
                             }
                             label: {
                                 Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
@@ -79,21 +79,34 @@ struct SearchView: View {
                             .padding()
                             .contentTransition(.symbolEffect(.replace))
                         }
-                        //                    .onTapGesture {
-                        //                        movieViewModel.selectedMovie = movie
-                        //                    }
+                        .onTapGesture {
+                            searchViewModel.selectedMovie = movie
+                        }
                     }
                     .padding(.bottom)
                     .listRowSeparator(.hidden)
+                }
+                .task {
+                    searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                 }
             }
             .buttonStyle(BorderlessButtonStyle())
             .listStyle(PlainListStyle())
             .scrollIndicators(.hidden)
+            .sheet(item: $searchViewModel.selectedMovie) { movie in
+                DetailView(movie: movie)
+            }
         }
     }
 }
 
 #Preview {
-    SearchView(watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()), router: NavigationRouter())
+    SearchView(
+        watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()),
+        searchViewModel: SearchViewModel(
+            apiService: APIService(),
+            movieWatchlistStatusService: MovieWatchlistStatusService()
+        ),
+        router: NavigationRouter()
+    )
 }

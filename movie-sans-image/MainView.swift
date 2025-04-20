@@ -10,11 +10,22 @@ import SwiftUI
 struct MainView: View {
     private let apiService = APIService()
     private let coreDataService = CoreDataService()
+    private let movieWatchlistStatusService = MovieWatchlistStatusService()
     @State var watchlistViewModel: WatchlistViewModel
+    @State var searchViewModel: SearchViewModel
+    @State var movieViewModel: MovieViewModel
     @State var router = NavigationRouter()
 
     init() {
         _watchlistViewModel = State(wrappedValue: WatchlistViewModel(coreDataService: coreDataService))
+        _movieViewModel = State(wrappedValue: MovieViewModel(
+            apiService: apiService,
+            movieWatchlistStatusService: movieWatchlistStatusService
+        ))
+        _searchViewModel = State(wrappedValue: SearchViewModel(
+            apiService: apiService,
+            movieWatchlistStatusService: movieWatchlistStatusService
+        ))
 
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
@@ -27,21 +38,28 @@ struct MainView: View {
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house.fill") {
-                HomeView(
-                    movieViewModel: MovieViewModel(apiService: apiService),
-                    watchlistViewModel: watchlistViewModel
-                )
+                HomeView(movieViewModel: movieViewModel, watchlistViewModel: watchlistViewModel)
             }
 
             Tab("Search", systemImage: "magnifyingglass") {
                 NavigationStack(path: $router.path) {
-                    SearchView(watchlistViewModel: watchlistViewModel, router: router)
-                        .navigationDestination(for: Route.self) { route in
-                            switch route {
-                            case let .genre(genre):
-                                GenreView(genre: genre, genreViewModel: GenreViewModel(apiService: apiService))
-                            }
+                    SearchView(
+                        watchlistViewModel: watchlistViewModel,
+                        searchViewModel: searchViewModel, router: router
+                    )
+                    .navigationDestination(for: Route.self) { route in
+                        switch route {
+                        case let .genre(genre):
+                            GenreView(
+                                genre: genre,
+                                watchlistViewModel: watchlistViewModel,
+                                genreViewModel: GenreViewModel(
+                                    apiService: apiService,
+                                    movieWatchlistStatusService: movieWatchlistStatusService
+                                )
+                            )
                         }
+                    }
                 }
                 .tint(.primary)
             }

@@ -12,7 +12,7 @@ struct WatchlistView: View {
 
     var body: some View {
         List {
-            ForEach(watchlistViewModel.watchlist) { watchlistItem in
+            ForEach(watchlistViewModel.watchlist, id: \.id) { watchlistItem in
                 NeubrutalContainerView(backgroundColour: .gray) {
                     HStack {
                         Button(action: {
