@@ -14,7 +14,7 @@ class GenreViewModel {
     var networkError: String = ""
     var selectedMovie: Movie?
 
-    init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusService) {
+    init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol) {
         self.apiService = apiService
         self.movieWatchlistStatusService = movieWatchlistStatusService
     }

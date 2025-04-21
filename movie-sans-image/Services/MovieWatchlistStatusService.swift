@@ -7,7 +7,7 @@
 
 protocol MovieWatchlistStatusServiceProtocol {
     func addWatchListStatus(to movies: [Movie], watchlist: [WatchlistEntity]) -> [Movie]
-    func toggleWatchlistFlag(for: Int, movies: [Movie]) -> [Movie]
+    func toggleWatchlistFlag(for movieID: Int, movies: [Movie]) -> [Movie]
 }
 
 class MovieWatchlistStatusService: MovieWatchlistStatusServiceProtocol {

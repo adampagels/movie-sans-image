@@ -20,7 +20,7 @@ class SearchViewModel {
         movies.isEmpty
     }
 
-    init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusService) {
+    init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol) {
         self.apiService = apiService
         self.movieWatchlistStatusService = movieWatchlistStatusService
     }
