@@ -31,9 +31,9 @@ struct WatchlistView: View {
                 }
                 .padding(.bottom)
                 .swipeActions(allowsFullSwipe: true) {
-                    Button(action: {
+                    Button(role: .destructive) {
                         watchlistViewModel.removeFromWatchlist(movieID: Int(watchlistItem.id))
-                    }) {
+                    } label: {
                         Image(systemName: "xmark")
                     }
                 }
@@ -41,14 +41,16 @@ struct WatchlistView: View {
                 .listRowSeparator(.hidden)
             }
         }
+
         .listStyle(PlainListStyle())
         .toolbar {
             ThemeButton()
         }
-
     }
 }
 
 #Preview {
-    WatchlistView(watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()))
+    NavigationStack {
+        WatchlistView(watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()))
+    }
 }
