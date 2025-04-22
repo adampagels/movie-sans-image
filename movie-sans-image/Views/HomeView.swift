@@ -84,18 +84,19 @@ struct HomeView: View {
                 DetailView(movie: movie)
             }
             .toolbar {
-                NeubrutalContainerView(backgroundColour: theme == .dark ? .black : .blue) {
-                    withAnimation {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NeubrutalContainerView(backgroundColour: theme.iconBackgroundColor) {
                         Image(systemName: theme.iconName)
                             .padding(7)
-                            .foregroundStyle(theme == .dark ? .white : .yellow)
+                            .foregroundStyle(theme.iconColor)
                             .fixedSize()
                             .imageScale(.small)
+                            .symbolEffect(.bounce, options: .repeat(1), value: theme)
                     }
-                }
-                .padding(.bottom)
-                .onTapGesture {
-                    theme = theme == .dark ? .light : .dark
+                    .padding(.bottom)
+                    .onTapGesture {
+                        theme = theme == .dark ? .light : .dark
+                    }
                 }
             }
         }

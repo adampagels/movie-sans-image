@@ -30,11 +30,19 @@ enum Theme: String, CaseIterable, Identifiable {
         }
     }
 
-    var iconColor: String {
+    var iconColor: Color {
         switch self {
-        case .system: return "Automatic"
-        case .light: return "Light"
-        case .dark: return "Dark"
+        case .system: return .black
+        case .light: return .yellow
+        case .dark: return .white
+        }
+    }
+
+    var iconBackgroundColor: Color {
+        switch self {
+        case .system: return .white
+        case .light: return .blue
+        case .dark: return .black
         }
     }
 }
