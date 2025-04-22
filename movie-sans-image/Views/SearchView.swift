@@ -97,16 +97,21 @@ struct SearchView: View {
                 DetailView(movie: movie)
             }
         }
+        .toolbar {
+            ThemeButton()
+        }
     }
 }
 
 #Preview {
-    SearchView(
-        watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()),
-        searchViewModel: SearchViewModel(
-            apiService: APIService(),
-            movieWatchlistStatusService: MovieWatchlistStatusService()
-        ),
-        router: NavigationRouter()
-    )
+    NavigationStack {
+        SearchView(
+            watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()),
+            searchViewModel: SearchViewModel(
+                apiService: APIService(),
+                movieWatchlistStatusService: MovieWatchlistStatusService()
+            ),
+            router: NavigationRouter()
+        )
+    }
 }

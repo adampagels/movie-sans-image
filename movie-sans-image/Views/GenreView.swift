@@ -56,16 +56,21 @@ struct GenreView: View {
         .sheet(item: $genreViewModel.selectedMovie) { movie in
             DetailView(movie: movie)
         }
+        .toolbar {
+            ThemeButton()
+        }
     }
 }
 
 #Preview {
-    GenreView(
-        genre: .action,
-        watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()),
-        genreViewModel: GenreViewModel(
-            apiService: APIService(),
-            movieWatchlistStatusService: MovieWatchlistStatusService()
+    NavigationStack {
+        GenreView(
+            genre: .action,
+            watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()),
+            genreViewModel: GenreViewModel(
+                apiService: APIService(),
+                movieWatchlistStatusService: MovieWatchlistStatusService()
+            )
         )
-    )
+    }
 }

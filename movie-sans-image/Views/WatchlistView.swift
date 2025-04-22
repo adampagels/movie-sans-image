@@ -42,6 +42,10 @@ struct WatchlistView: View {
             }
         }
         .listStyle(PlainListStyle())
+        .toolbar {
+            ThemeButton()
+        }
+
     }
 }
 

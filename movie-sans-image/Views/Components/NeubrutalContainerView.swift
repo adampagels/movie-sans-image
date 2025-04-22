@@ -25,3 +25,11 @@ struct NeubrutalContainerView<Content: View>: View {
         }
     }
 }
+
+#Preview {
+    NeubrutalContainerView(backgroundColour: .red) {
+        Text("inside container text")
+            .padding()
+    }
+    .fixedSize()
+}

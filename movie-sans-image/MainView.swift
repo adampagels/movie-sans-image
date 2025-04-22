@@ -38,7 +38,9 @@ struct MainView: View {
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house.fill") {
-                HomeView(movieViewModel: movieViewModel, watchlistViewModel: watchlistViewModel)
+                NavigationStack(path: $router.path) {
+                    HomeView(movieViewModel: movieViewModel, watchlistViewModel: watchlistViewModel)
+                }
             }
 
             Tab("Search", systemImage: "magnifyingglass") {
@@ -65,7 +67,9 @@ struct MainView: View {
             }
 
             Tab("Watchlist", systemImage: "list.bullet") {
-                WatchlistView(watchlistViewModel: watchlistViewModel)
+                NavigationStack(path: $router.path) {
+                    WatchlistView(watchlistViewModel: watchlistViewModel)
+                }
             }
         }
     }
