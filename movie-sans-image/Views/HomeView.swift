@@ -56,8 +56,7 @@ struct HomeView: View {
                                     movieViewModel.toggleWatchlistStatus(movieID: movie.id)
                                 }
                                 watchlistViewModel.persistWatchlistChange(movie: movie)
-                            }
-                            label: {
+                            } label: {
                                 Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
                                     .foregroundStyle(.black)
                                     .fontWeight(.bold)
@@ -65,6 +64,8 @@ struct HomeView: View {
                             .padding()
                             .contentTransition(.symbolEffect(.replace))
                         }
+                        .accessibility(addTraits: .isButton)
+                        .accessibilityIdentifier("MovieListItem")
                         .onTapGesture {
                             movieViewModel.selectedMovie = movie
                         }

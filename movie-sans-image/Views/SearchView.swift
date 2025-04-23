@@ -49,6 +49,8 @@ struct SearchView: View {
                                     .padding(.vertical)
                                     .fixedSize()
                             }
+                            .accessibility(addTraits: .isButton)
+                            .accessibilityIdentifier("GenreListItem")
                             .onTapGesture {
                                 router.push(Route.genre(genre))
                             }

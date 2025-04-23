@@ -14,9 +14,12 @@ struct DetailView: View {
             Text(movie.title)
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .topLeading)
+                .accessibilityIdentifier("DetailViewMovieTitle")
             Text(movie.overview ?? "")
                 .font(.headline)
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("DetailViewSheet")
         .padding()
     }
 }
