@@ -15,7 +15,7 @@ final class movie_sans_imageUITests: XCTestCase {
     }
 
     override func tearDownWithError() throws {}
-    DetailViewSheet
+
     func testMovieTitlePressOpensDetailView() {
         let movieItem = app.buttons["MovieListItem"].firstMatch
         movieItem.tap()
@@ -47,6 +47,22 @@ final class movie_sans_imageUITests: XCTestCase {
         let navTitle = app.navigationBars.element.staticTexts.firstMatch
 
         XCTAssertEqual(buttonLabel, navTitle.label)
+    }
+
+    func testMovieCanBeAddedAndRemovedFromWatchlist() {
+        app.buttons["Add"].firstMatch.tap()
+
+        let movieItemInHomeView = app.buttons["MovieListItem"].firstMatch
+        let movieLabel = movieItemInHomeView.label
+
+        app.tabBars["Tab Bar"].buttons["Watchlist"].tap()
+
+        let movieItemInWatchlistView = app.buttons[movieLabel]
+        movieItemInWatchlistView.swipeLeft()
+
+        app.buttons["SwipeToDeleteButton"].tap()
+
+        XCTAssertFalse(movieItemInWatchlistView.exists)
     }
 
     @MainActor

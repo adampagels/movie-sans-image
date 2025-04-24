@@ -27,6 +27,8 @@ struct WatchlistView: View {
                         Text(watchlistItem.title ?? "")
                             .strikethrough(watchlistItem.isWatched)
                     }
+                    .accessibility(addTraits: .isButton)
+                    .accessibilityIdentifier("MovieListItem")
                     .frame(maxWidth: .infinity, alignment: .topLeading)
                 }
                 .padding(.bottom)
@@ -36,6 +38,7 @@ struct WatchlistView: View {
                     } label: {
                         Image(systemName: "xmark")
                     }
+                    .accessibilityIdentifier("SwipeToDeleteButton")
                 }
                 .tint(.black)
                 .listRowSeparator(.hidden)
