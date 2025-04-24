@@ -60,31 +60,19 @@ struct SearchView: View {
                 }
 
                 ForEach(searchViewModel.movies) { movie in
-                    NeubrutalContainerView(backgroundColour: .gray) {
-                        HStack {
-                            Text(movie.title)
-                                .padding()
-
-                            Spacer()
-
-                            Button {
-                                withAnimation {
-                                    searchViewModel.toggleWatchlistStatus(movieID: movie.id)
-                                }
-                                watchlistViewModel.persistWatchlistChange(movie: movie)
+                    MovieListItem(
+                        movie: movie,
+                        isInWatchlist: movie.isInWatchlist ?? false,
+                        toggleWatchlist: {
+                            withAnimation {
+                                searchViewModel.toggleWatchlistStatus(movieID: movie.id)
                             }
-                            label: {
-                                Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
-                                    .foregroundStyle(.black)
-                                    .fontWeight(.bold)
-                            }
-                            .padding()
-                            .contentTransition(.symbolEffect(.replace))
-                        }
-                        .onTapGesture {
+                            watchlistViewModel.persistWatchlistChange(movie: movie)
+                        },
+                        onSelect: {
                             searchViewModel.selectedMovie = movie
                         }
-                    }
+                    )
                     .padding(.bottom)
                     .listRowSeparator(.hidden)
                 }

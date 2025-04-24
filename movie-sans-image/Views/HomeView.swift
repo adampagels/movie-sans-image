@@ -44,32 +44,19 @@ struct HomeView: View {
                 .listRowSeparator(.hidden)
 
                 ForEach(movieViewModel.movies) { movie in
-                    NeubrutalContainerView(backgroundColour: .gray) {
-                        HStack {
-                            Text(movie.title)
-                                .padding()
-
-                            Spacer()
-
-                            Button {
-                                withAnimation {
-                                    movieViewModel.toggleWatchlistStatus(movieID: movie.id)
-                                }
-                                watchlistViewModel.persistWatchlistChange(movie: movie)
-                            } label: {
-                                Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
-                                    .foregroundStyle(.black)
-                                    .fontWeight(.bold)
+                    MovieListItem(
+                        movie: movie,
+                        isInWatchlist: movie.isInWatchlist ?? false,
+                        toggleWatchlist: {
+                            withAnimation {
+                                movieViewModel.toggleWatchlistStatus(movieID: movie.id)
                             }
-                            .padding()
-                            .contentTransition(.symbolEffect(.replace))
-                        }
-                        .accessibility(addTraits: .isButton)
-                        .accessibilityIdentifier("MovieListItem")
-                        .onTapGesture {
+                            watchlistViewModel.persistWatchlistChange(movie: movie)
+                        },
+                        onSelect: {
                             movieViewModel.selectedMovie = movie
                         }
-                    }
+                    )
                     .padding(.bottom)
                     .listRowSeparator(.hidden)
                 }

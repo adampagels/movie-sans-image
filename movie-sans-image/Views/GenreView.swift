@@ -14,31 +14,19 @@ struct GenreView: View {
     var body: some View {
         List {
             ForEach(genreViewModel.movies) { movie in
-                NeubrutalContainerView(backgroundColour: .gray) {
-                    HStack {
-                        Text(movie.title)
-                            .padding()
-
-                        Spacer()
-
-                        Button {
-                            withAnimation {
-                                genreViewModel.toggleWatchlistStatus(movieID: movie.id)
-                            }
-                            watchlistViewModel.persistWatchlistChange(movie: movie)
+                MovieListItem(
+                    movie: movie,
+                    isInWatchlist: movie.isInWatchlist ?? false,
+                    toggleWatchlist: {
+                        withAnimation {
+                            genreViewModel.toggleWatchlistStatus(movieID: movie.id)
                         }
-                        label: {
-                            Image(systemName: movie.isInWatchlist ?? false ? "checkmark" : "plus")
-                                .foregroundStyle(.black)
-                                .fontWeight(.bold)
-                        }
-                        .padding()
-                        .contentTransition(.symbolEffect(.replace))
-                    }
-                    .onTapGesture {
+                        watchlistViewModel.persistWatchlistChange(movie: movie)
+                    },
+                    onSelect: {
                         genreViewModel.selectedMovie = movie
                     }
-                }
+                )
                 .padding(.bottom)
                 .listRowSeparator(.hidden)
             }
