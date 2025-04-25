@@ -43,23 +43,18 @@ struct HomeView: View {
                 .scrollIndicators(.hidden)
                 .listRowSeparator(.hidden)
 
-                ForEach(movieViewModel.movies) { movie in
-                    MovieListItem(
-                        movie: movie,
-                        isInWatchlist: movie.isInWatchlist ?? false,
-                        toggleWatchlist: {
-                            withAnimation {
-                                movieViewModel.toggleWatchlistStatus(movieID: movie.id)
-                            }
-                            watchlistViewModel.persistWatchlistChange(movie: movie)
-                        },
-                        onSelect: {
-                            movieViewModel.selectedMovie = movie
+                MovieList(
+                    movies: movieViewModel.movies,
+                    toggleWatchlist: { (movie: Movie) in
+                        withAnimation {
+                            movieViewModel.toggleWatchlistStatus(movieID: movie.id)
                         }
-                    )
-                    .padding(.bottom)
-                    .listRowSeparator(.hidden)
-                }
+                        watchlistViewModel.persistWatchlistChange(movie: movie)
+                    },
+                    onSelect: { (movie: Movie) in
+                        movieViewModel.selectedMovie = movie
+                    }
+                )
             }
             .buttonStyle(BorderlessButtonStyle())
             .listStyle(PlainListStyle())

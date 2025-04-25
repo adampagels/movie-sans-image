@@ -59,23 +59,18 @@ struct SearchView: View {
                     .listRowSeparator(.hidden)
                 }
 
-                ForEach(searchViewModel.movies) { movie in
-                    MovieListItem(
-                        movie: movie,
-                        isInWatchlist: movie.isInWatchlist ?? false,
-                        toggleWatchlist: {
-                            withAnimation {
-                                searchViewModel.toggleWatchlistStatus(movieID: movie.id)
-                            }
-                            watchlistViewModel.persistWatchlistChange(movie: movie)
-                        },
-                        onSelect: {
-                            searchViewModel.selectedMovie = movie
+                MovieList(
+                    movies: searchViewModel.movies,
+                    toggleWatchlist: { (movie: Movie) in
+                        withAnimation {
+                            searchViewModel.toggleWatchlistStatus(movieID: movie.id)
                         }
-                    )
-                    .padding(.bottom)
-                    .listRowSeparator(.hidden)
-                }
+                        watchlistViewModel.persistWatchlistChange(movie: movie)
+                    },
+                    onSelect: { (movie: Movie) in
+                        searchViewModel.selectedMovie = movie
+                    }
+                )
                 .task {
                     searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                 }

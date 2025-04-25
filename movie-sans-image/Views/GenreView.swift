@@ -13,23 +13,18 @@ struct GenreView: View {
     @State var genreViewModel: GenreViewModel
     var body: some View {
         List {
-            ForEach(genreViewModel.movies) { movie in
-                MovieListItem(
-                    movie: movie,
-                    isInWatchlist: movie.isInWatchlist ?? false,
-                    toggleWatchlist: {
-                        withAnimation {
-                            genreViewModel.toggleWatchlistStatus(movieID: movie.id)
-                        }
-                        watchlistViewModel.persistWatchlistChange(movie: movie)
-                    },
-                    onSelect: {
-                        genreViewModel.selectedMovie = movie
+            MovieList(
+                movies: genreViewModel.movies,
+                toggleWatchlist: { (movie: Movie) in
+                    withAnimation {
+                        genreViewModel.toggleWatchlistStatus(movieID: movie.id)
                     }
-                )
-                .padding(.bottom)
-                .listRowSeparator(.hidden)
-            }
+                    watchlistViewModel.persistWatchlistChange(movie: movie)
+                },
+                onSelect: { (movie: Movie) in
+                    genreViewModel.selectedMovie = movie
+                }
+            )
         }
         .task {
             await genreViewModel.getMoviesByGenreID(genreID: genre.id)
