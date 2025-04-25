@@ -65,6 +65,35 @@ final class movie_sans_imageUITests: XCTestCase {
         XCTAssertFalse(movieItemInWatchlistView.exists)
     }
 
+    func testNestedTabsProperlyNavigate() {
+        app.tabBars["Tab Bar"].buttons["Search"].tap()
+        app.buttons["GenreListItem"].firstMatch.tap()
+
+        let movieItemInGenreView = app.buttons["MovieListItem"].firstMatch
+        let movieLabel = movieItemInGenreView.label
+
+        app.buttons["Add"].firstMatch.tap()
+        app.tabBars["Tab Bar"].buttons["Watchlist"].tap()
+
+        let movieItemInWatchlistView = app.buttons[movieLabel]
+        movieItemInWatchlistView.swipeLeft()
+
+        XCTAssertTrue(movieItemInWatchlistView.exists)
+
+        app.buttons["SwipeToDeleteButton"].tap()
+        XCTAssertFalse(movieItemInWatchlistView.exists)
+
+        app.tabBars["Tab Bar"].buttons["Search"].tap()
+
+        XCTAssertTrue(movieItemInGenreView.exists)
+
+        app.tabBars["Tab Bar"].buttons["Home"].tap()
+
+        let movieItemInHomeView = app.buttons["MovieListItem"].firstMatch
+
+        XCTAssertTrue(movieItemInHomeView.exists)
+    }
+
     @MainActor
     func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {

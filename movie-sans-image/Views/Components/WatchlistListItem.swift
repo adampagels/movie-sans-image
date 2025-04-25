@@ -29,7 +29,7 @@ struct WatchlistListItem: View {
                     .strikethrough(isWatched)
             }
             .accessibility(addTraits: .isButton)
-            .accessibilityIdentifier("MovieListItem")
+            .accessibilityIdentifier("WatchlistListItem")
             .frame(maxWidth: .infinity, alignment: .topLeading)
         }
         .padding(.bottom)
