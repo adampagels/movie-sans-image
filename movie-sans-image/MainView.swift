@@ -14,7 +14,9 @@ struct MainView: View {
     @State var watchlistViewModel: WatchlistViewModel
     @State var searchViewModel: SearchViewModel
     @State var movieViewModel: MovieViewModel
-    @State var router = NavigationRouter()
+    @State private var homeRouter = NavigationRouter()
+    @State private var searchRouter = NavigationRouter()
+    @State private var watchlistRouter = NavigationRouter()
 
     init() {
         _watchlistViewModel = State(wrappedValue: WatchlistViewModel(coreDataService: coreDataService))
@@ -38,16 +40,16 @@ struct MainView: View {
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house.fill") {
-                NavigationStack(path: $router.path) {
+                NavigationStack(path: $homeRouter.path) {
                     HomeView(movieViewModel: movieViewModel, watchlistViewModel: watchlistViewModel)
                 }
             }
 
             Tab("Search", systemImage: "magnifyingglass") {
-                NavigationStack(path: $router.path) {
+                NavigationStack(path: $searchRouter.path) {
                     SearchView(
                         watchlistViewModel: watchlistViewModel,
-                        searchViewModel: searchViewModel, router: router
+                        searchViewModel: searchViewModel, router: searchRouter
                     )
                     .navigationDestination(for: Route.self) { route in
                         switch route {
@@ -67,7 +69,7 @@ struct MainView: View {
             }
 
             Tab("Watchlist", systemImage: "list.bullet") {
-                NavigationStack(path: $router.path) {
+                NavigationStack(path: $watchlistRouter.path) {
                     WatchlistView(watchlistViewModel: watchlistViewModel)
                 }
             }
