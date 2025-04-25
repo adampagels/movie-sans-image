@@ -12,39 +12,16 @@ struct WatchlistView: View {
 
     var body: some View {
         List {
-            ForEach(watchlistViewModel.watchlist, id: \.id) { watchlistItem in
-                NeubrutalContainerView(backgroundColour: .gray) {
-                    HStack {
-                        Button(action: {
-                            watchlistViewModel.markAsWatched(entity: watchlistItem)
-                        }) {
-                            Image(systemName: watchlistItem.isWatched ? "checkmark.square.fill" : "square")
-                                .imageScale(.large)
-                        }
-                        .padding()
-                        .buttonStyle(.plain)
-
-                        Text(watchlistItem.title ?? "")
-                            .strikethrough(watchlistItem.isWatched)
-                    }
-                    .accessibility(addTraits: .isButton)
-                    .accessibilityIdentifier("MovieListItem")
-                    .frame(maxWidth: .infinity, alignment: .topLeading)
+            WatchlistList(
+                movies: watchlistViewModel.watchlist,
+                toggleWatched: { (movie: WatchlistEntity) in
+                    watchlistViewModel.markAsWatched(entity: movie)
+                },
+                removeFromWatchlist: { (movieID: Int) in
+                    watchlistViewModel.removeFromWatchlist(movieID: movieID)
                 }
-                .padding(.bottom)
-                .swipeActions(allowsFullSwipe: true) {
-                    Button(role: .destructive) {
-                        watchlistViewModel.removeFromWatchlist(movieID: Int(watchlistItem.id))
-                    } label: {
-                        Image(systemName: "xmark")
-                    }
-                    .accessibilityIdentifier("SwipeToDeleteButton")
-                }
-                .tint(.black)
-                .listRowSeparator(.hidden)
-            }
+            )
         }
-
         .listStyle(PlainListStyle())
         .toolbar {
             ThemeButton()
