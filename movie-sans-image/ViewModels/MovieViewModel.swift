@@ -21,10 +21,6 @@ class MovieViewModel {
         self.movieWatchlistStatusService = movieWatchlistStatusService
     }
 
-    func selectCategory(category: MovieListCategory) {
-        selectedCategory = category
-    }
-
     func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
         movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
     }

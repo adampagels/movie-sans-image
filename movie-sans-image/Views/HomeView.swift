@@ -26,7 +26,7 @@ struct HomeView: View {
                             }
                             .onTapGesture {
                                 withAnimation {
-                                    movieViewModel.selectCategory(category: category)
+                                    movieViewModel.selectedCategory = category
                                 }
                                 Task {
                                     await movieViewModel.getMovies()
