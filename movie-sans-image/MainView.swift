@@ -65,7 +65,7 @@ struct MainView: View {
                         }
                     }
                 }
-                .tint(.primary)
+                .tint(.primaryColor)
             }
 
             Tab("Watchlist", systemImage: "list.bullet") {

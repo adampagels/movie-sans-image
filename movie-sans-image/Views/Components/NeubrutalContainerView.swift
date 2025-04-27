@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NeubrutalContainerView<Content: View>: View {
-    let backgroundColour: Color
+    let backgroundColor: Color
     @ViewBuilder var content: Content
 
     var body: some View {
@@ -16,7 +16,7 @@ struct NeubrutalContainerView<Content: View>: View {
             RoundedRectangle(cornerRadius: 8)
                 .offset(x: 3, y: 5)
             RoundedRectangle(cornerRadius: 8)
-                .foregroundColor(backgroundColour)
+                .foregroundColor(backgroundColor)
 
             content
 
@@ -27,7 +27,7 @@ struct NeubrutalContainerView<Content: View>: View {
 }
 
 #Preview {
-    NeubrutalContainerView(backgroundColour: .red) {
+    NeubrutalContainerView(backgroundColor: .secondaryColor) {
         Text("inside container text")
             .padding()
     }

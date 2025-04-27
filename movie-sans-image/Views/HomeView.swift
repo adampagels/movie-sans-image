@@ -18,7 +18,7 @@ struct HomeView: View {
                 ScrollView(.horizontal) {
                     HStack(spacing: 16) {
                         ForEach(MovieListCategory.allCases, id: \.rawValue) { category in
-                            NeubrutalContainerView(backgroundColour: movieViewModel
+                            NeubrutalContainerView(backgroundColor: movieViewModel
                                 .selectedCategory == category ? .blue : .gray)
                             {
                                 Text(category.rawValue)

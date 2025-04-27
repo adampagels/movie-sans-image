@@ -14,7 +14,7 @@ struct WatchlistListItem: View {
     let removeFromWatchlist: () -> Void
 
     var body: some View {
-        NeubrutalContainerView(backgroundColour: .gray) {
+        NeubrutalContainerView(backgroundColor: .secondaryColor) {
             HStack {
                 Button(action: {
                     toggleWatched()
@@ -41,7 +41,6 @@ struct WatchlistListItem: View {
             }
             .accessibilityIdentifier("SwipeToDeleteButton")
         }
-        .tint(.black)
         .listRowSeparator(.hidden)
     }
 }

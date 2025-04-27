@@ -14,7 +14,7 @@ struct MovieListItem: View {
     let onSelect: () -> Void
 
     var body: some View {
-        NeubrutalContainerView(backgroundColour: .gray) {
+        NeubrutalContainerView(backgroundColor: .secondaryColor) {
             HStack {
                 Text(movie.title)
                     .padding()

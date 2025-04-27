@@ -11,7 +11,7 @@ struct ThemeButton: ToolbarContent {
     @AppStorage("theme") var theme: Theme = .system
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
-            NeubrutalContainerView(backgroundColour: theme.iconBackgroundColor) {
+            NeubrutalContainerView(backgroundColor: theme.iconBackgroundColor) {
                 Image(systemName: theme.iconName)
                     .padding(7)
                     .foregroundStyle(theme.iconColor)
