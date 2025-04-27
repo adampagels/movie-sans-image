@@ -10,6 +10,17 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
 
+    static let modelName = "WatchlistContainer"
+
+    static let model: NSManagedObjectModel = {
+        guard let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd"),
+              let model = NSManagedObjectModel(contentsOf: modelURL)
+        else {
+            fatalError("Unable to locate Core Data model")
+        }
+        return model
+    }()
+
     let persistentContainer: NSPersistentContainer
 
     var viewContext: NSManagedObjectContext {
@@ -17,7 +28,10 @@ struct PersistenceController {
     }
 
     private init() {
-        persistentContainer = NSPersistentContainer(name: "WatchlistContainer")
+        persistentContainer = NSPersistentContainer(
+            name: PersistenceController.modelName,
+            managedObjectModel: PersistenceController.model
+        )
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         persistentContainer.loadPersistentStores { _, error in
             if let error = error as NSError? {
