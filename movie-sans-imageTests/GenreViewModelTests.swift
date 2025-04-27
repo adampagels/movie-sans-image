@@ -9,27 +9,31 @@ import CoreData
 @testable import movie_sans_image
 import Testing
 
-class TestCoreDataStack {
-    static let shared = TestCoreDataStack()
-
+struct MockPersistenceController {
     let persistentContainer: NSPersistentContainer
 
     var viewContext: NSManagedObjectContext {
-        return persistentContainer.viewContext
+        persistentContainer.viewContext
     }
 
-    private init() {
-        persistentContainer = NSPersistentContainer(name: "WatchlistContainer")
+    init() {
+        let container = NSPersistentContainer(
+            name: PersistenceController.modelName,
+            managedObjectModel: PersistenceController.model
+        )
 
         let description = NSPersistentStoreDescription()
-        description.url = URL(fileURLWithPath: "/dev/null")
-        persistentContainer.persistentStoreDescriptions = [description]
+        description.type = NSInMemoryStoreType
 
-        persistentContainer.loadPersistentStores { _, error in
-            if let error = error {
-                fatalError("Failed to load in-memory Core Data stack: \(error)")
+        container.persistentStoreDescriptions = [description]
+
+        container.loadPersistentStores { _, error in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }
+
+        persistentContainer = container
     }
 }
 
@@ -169,7 +173,7 @@ struct MovieWatchlistStatusServiceTests {
     @Test func addWatchlistStatus() {
         let movieWatchlistStatusService = MovieWatchlistStatusService()
 
-        let context = TestCoreDataStack.shared.viewContext
+        let context = MockPersistenceController().viewContext
         let watchlistEntity = movie_sans_image.WatchlistEntity(context: context)
         watchlistEntity.id = 1
 
@@ -180,5 +184,83 @@ struct MovieWatchlistStatusServiceTests {
         #expect(updatedMovies.count == 3)
         #expect(updatedMovies[0].isInWatchlist == true)
         #expect(updatedMovies[1].isInWatchlist == false)
+    }
+}
+
+struct CoreDataServiceTests {
+    @Test func fetchWatchlistFromCoreData() {
+        let service = CoreDataService(container: MockPersistenceController().persistentContainer)
+
+        do {
+            service.addToWatchList(movie: mockMovieArray[0])
+
+            let fetchedWatchlist = try service.fetchWatchlist()
+
+            #expect(fetchedWatchlist.count == 1, "Watchlist should contain exactly one movie")
+        } catch {
+            print("error in test", error)
+            #expect(Bool(false), "Failed to fetch watchlist: \(error)")
+        }
+    }
+
+    @Test func addAndFetchMovieFromCoreData() {
+        let service = CoreDataService(container: MockPersistenceController().persistentContainer)
+
+        service.addToWatchList(movie: mockMovieArray[0])
+
+        do {
+            let fetchedWatchlist = try service.fetchWatchlist()
+
+            #expect(fetchedWatchlist.count == 1, "Watchlist should contain exactly one movie")
+            #expect(fetchedWatchlist[0].id == mockMovieArray[0].id, "Movie ID should match the added movie")
+        } catch {
+            print("error in test", error)
+            #expect(Bool(false), "Failed to fetch watchlist: \(error)")
+        }
+    }
+
+    @Test func deleteMovieFromCoreData() {
+        let service = CoreDataService(container: MockPersistenceController().persistentContainer)
+
+        service.addToWatchList(movie: mockMovieArray[0])
+
+        do {
+            let fetchedWatchlist = try service.fetchWatchlist()
+
+            #expect(fetchedWatchlist.count == 1, "Watchlist should contain exactly one movie")
+            #expect(fetchedWatchlist[0].id == mockMovieArray[0].id, "Movie ID should match the added movie")
+
+            service.deleteWatchlistItem(movieID: mockMovieArray[0].id, entityList: fetchedWatchlist)
+
+            let updatedWatchlist = try service.fetchWatchlist()
+            #expect(updatedWatchlist.count == 0, "Watchlist should be empty after deletion")
+        } catch {
+            print("error in test", error)
+            #expect(Bool(false), "Failed to fetch watchlist: \(error)")
+        }
+    }
+
+    @Test func toggleWatchedStatusOfMovieInCoreData() {
+        let service = CoreDataService(container: MockPersistenceController().persistentContainer)
+
+        service.addToWatchList(movie: mockMovieArray[0])
+
+        do {
+            let fetchedWatchlist = try service.fetchWatchlist()
+
+            #expect(fetchedWatchlist.count == 1, "Watchlist should contain exactly one movie")
+            #expect(fetchedWatchlist[0].id == mockMovieArray[0].id, "Movie ID should match the added movie")
+
+            #expect(!fetchedWatchlist[0].isWatched, "isWatched should initalize as false")
+
+            service.toggleWatched(entity: fetchedWatchlist[0])
+            let refetchedWatchlist = try service.fetchWatchlist()
+
+            #expect(refetchedWatchlist[0].isWatched, "isWatched should now be true")
+
+        } catch {
+            print("error in test", error)
+            #expect(Bool(false), "Failed to fetch watchlist: \(error)")
+        }
     }
 }
