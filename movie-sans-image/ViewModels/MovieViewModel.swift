@@ -11,8 +11,7 @@ import SwiftUI
 class MovieViewModel {
     private let apiService: APIServiceProtocol
     private let movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol
-    var movies: [Movie] = []
-    var networkError: String = ""
+    var loadingState = LoadingState<[Movie]>.idle
     var selectedMovie: Movie?
     var selectedCategory: MovieListCategory = .popular
 
@@ -22,21 +21,29 @@ class MovieViewModel {
     }
 
     func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
-        movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
+        if case var .loaded(movies) = loadingState {
+            movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
+            loadingState = .loaded(movies)
+        }
     }
 
     func toggleWatchlistStatus(movieID: Int) {
-        movies = movieWatchlistStatusService.toggleWatchlistFlag(for: movieID, movies: movies)
+        if case var .loaded(movies) = loadingState {
+            movies = movieWatchlistStatusService.toggleWatchlistFlag(for: movieID, movies: movies)
+            loadingState = .loaded(movies)
+        }
     }
 
     @MainActor
     func getMovies() async {
+        loadingState = .loading
         do {
-            movies = try await apiService.fetchMovies(by: selectedCategory)
+            let movies = try await apiService.fetchMovies(by: selectedCategory)
+            loadingState = .loaded(movies)
         } catch let error as APIError {
-            networkError = error.localizedDescription
+            loadingState = .failed(error.localizedDescription)
         } catch {
-            networkError = "Something went wrong. Please try again"
+            loadingState = .failed("Something went wrong. Please try again")
         }
     }
 }

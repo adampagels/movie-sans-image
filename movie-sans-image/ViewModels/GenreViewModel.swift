@@ -10,8 +10,7 @@ import SwiftUI
 class GenreViewModel {
     private let apiService: APIServiceProtocol
     private let movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol
-    var movies: [Movie] = []
-    var networkError: String = ""
+    var loadingState = LoadingState<[Movie]>.idle
     var selectedMovie: Movie?
 
     init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol) {
@@ -20,21 +19,29 @@ class GenreViewModel {
     }
 
     func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
-        movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
+        if case var .loaded(movies) = loadingState {
+            movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
+            loadingState = .loaded(movies)
+        }
     }
 
     func toggleWatchlistStatus(movieID: Int) {
-        movies = movieWatchlistStatusService.toggleWatchlistFlag(for: movieID, movies: movies)
+        if case var .loaded(movies) = loadingState {
+            movies = movieWatchlistStatusService.toggleWatchlistFlag(for: movieID, movies: movies)
+            loadingState = .loaded(movies)
+        }
     }
 
     @MainActor
     func getMoviesByGenreID(genreID: String) async {
+        loadingState = .loading
         do {
-            movies = try await apiService.discoverMovies(with: genreID)
+            let movies = try await apiService.discoverMovies(with: genreID)
+            loadingState = .loaded(movies)
         } catch let error as APIError {
-            networkError = error.localizedDescription
+            loadingState = .failed(error.localizedDescription)
         } catch {
-            networkError = "Something went wrong. Please try again"
+            loadingState = .failed("Something went wrong. Please try again")
         }
     }
 }

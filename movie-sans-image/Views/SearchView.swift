@@ -33,8 +33,8 @@ struct SearchView: View {
             )
             .padding()
 
-            List {
-                if searchViewModel.shouldShowGenreList {
+            if searchViewModel.shouldShowGenreList {
+                List {
                     Text("Search by genres")
                         .fontWeight(.bold)
                         .font(.title2)
@@ -58,30 +58,51 @@ struct SearchView: View {
                     }
                     .listRowSeparator(.hidden)
                 }
-
-                MovieList(
-                    movies: searchViewModel.movies,
-                    toggleWatchlist: { (movie: Movie) in
-                        withAnimation {
-                            searchViewModel.toggleWatchlistStatus(movieID: movie.id)
-                        }
-                        watchlistViewModel.persistWatchlistChange(movie: movie)
-                    },
-                    onSelect: { (movie: Movie) in
-                        searchViewModel.selectedMovie = movie
-                    }
-                )
-                .task {
-                    searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
-                }
+                .buttonStyle(BorderlessButtonStyle())
+                .listStyle(PlainListStyle())
+                .scrollIndicators(.hidden)
             }
-            .buttonStyle(BorderlessButtonStyle())
-            .listStyle(PlainListStyle())
-            .scrollIndicators(.hidden)
-            .sheet(item: $searchViewModel.selectedMovie) { movie in
-                DetailView(movie: movie)
+
+            switch searchViewModel.loadingState {
+            case .idle:
+                EmptyView()
+
+            case .loading:
+                ProgressView()
+                    .frame(maxHeight: .infinity, alignment: .center)
+
+            case let .loaded(movies):
+                if !searchViewModel.shouldShowGenreList {
+                    List {
+                        MovieList(
+                            movies: movies,
+                            toggleWatchlist: { (movie: Movie) in
+                                withAnimation {
+                                    searchViewModel.toggleWatchlistStatus(movieID: movie.id)
+                                }
+                                watchlistViewModel.persistWatchlistChange(movie: movie)
+                            },
+                            onSelect: { (movie: Movie) in
+                                searchViewModel.selectedMovie = movie
+                            }
+                        )
+                        .task {
+                            searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+                        }
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .listStyle(PlainListStyle())
+                    .scrollIndicators(.hidden)
+                    .sheet(item: $searchViewModel.selectedMovie) { movie in
+                        DetailView(movie: movie)
+                    }
+                }
+
+            case .failed:
+                Text("Error")
             }
         }
+        .frame(maxHeight: .infinity, alignment: .top)
         .toolbar {
             ThemeButton()
         }

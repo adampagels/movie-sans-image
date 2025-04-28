@@ -14,7 +14,7 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            List {
+            VStack {
                 ScrollView(.horizontal) {
                     HStack(spacing: 16) {
                         ForEach(MovieListCategory.allCases, id: \.rawValue) { category in
@@ -30,41 +30,59 @@ struct HomeView: View {
                                 }
                                 Task {
                                     await movieViewModel.getMovies()
-                                    movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+                                    movieViewModel
+                                        .initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                                 }
                             }
                             .fixedSize()
                         }
                     }
-                    .padding(.vertical)
+                    .padding()
                     .listRowSeparator(.hidden)
                 }
                 .scrollClipDisabled()
                 .scrollIndicators(.hidden)
                 .listRowSeparator(.hidden)
 
-                MovieList(
-                    movies: movieViewModel.movies,
-                    toggleWatchlist: { (movie: Movie) in
-                        withAnimation {
-                            movieViewModel.toggleWatchlistStatus(movieID: movie.id)
-                        }
-                        watchlistViewModel.persistWatchlistChange(movie: movie)
-                    },
-                    onSelect: { (movie: Movie) in
-                        movieViewModel.selectedMovie = movie
+                switch movieViewModel.loadingState {
+                case .idle:
+                    EmptyView()
+
+                case .loading:
+                    ProgressView()
+                        .frame(maxHeight: .infinity, alignment: .center)
+
+                case let .loaded(movies):
+                    List {
+                        MovieList(
+                            movies: movies,
+                            toggleWatchlist: { (movie: Movie) in
+                                withAnimation {
+                                    movieViewModel.toggleWatchlistStatus(movieID: movie.id)
+                                }
+                                watchlistViewModel.persistWatchlistChange(movie: movie)
+                            },
+                            onSelect: { (movie: Movie) in
+                                movieViewModel.selectedMovie = movie
+                            }
+                        )
                     }
-                )
+                    .buttonStyle(BorderlessButtonStyle())
+                    .listStyle(PlainListStyle())
+                    .scrollIndicators(.hidden)
+                    .sheet(item: $movieViewModel.selectedMovie) { movie in
+                        DetailView(movie: movie)
+                    }
+
+                case .failed:
+                    Text("Error")
+                        .frame(maxHeight: .infinity, alignment: .center)
+                }
             }
-            .buttonStyle(BorderlessButtonStyle())
-            .listStyle(PlainListStyle())
-            .scrollIndicators(.hidden)
+            .frame(maxHeight: .infinity, alignment: .top)
             .task {
                 await movieViewModel.getMovies()
                 movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
-            }
-            .sheet(item: $movieViewModel.selectedMovie) { movie in
-                DetailView(movie: movie)
             }
             .toolbar {
                 ThemeButton()

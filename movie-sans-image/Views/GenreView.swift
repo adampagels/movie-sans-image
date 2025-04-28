@@ -12,36 +12,52 @@ struct GenreView: View {
     var watchlistViewModel: WatchlistViewModel
     @State var genreViewModel: GenreViewModel
     var body: some View {
-        List {
-            MovieList(
-                movies: genreViewModel.movies,
-                toggleWatchlist: { (movie: Movie) in
-                    withAnimation {
-                        genreViewModel.toggleWatchlistStatus(movieID: movie.id)
-                    }
-                    watchlistViewModel.persistWatchlistChange(movie: movie)
-                },
-                onSelect: { (movie: Movie) in
-                    genreViewModel.selectedMovie = movie
+        VStack {
+            switch genreViewModel.loadingState {
+            case .idle:
+                EmptyView()
+
+            case .loading:
+                ProgressView()
+                    .frame(maxHeight: .infinity, alignment: .center)
+
+            case let .loaded(movies):
+                List {
+                    MovieList(
+                        movies: movies,
+                        toggleWatchlist: { (movie: Movie) in
+                            withAnimation {
+                                genreViewModel.toggleWatchlistStatus(movieID: movie.id)
+                            }
+                            watchlistViewModel.persistWatchlistChange(movie: movie)
+                        },
+                        onSelect: { (movie: Movie) in
+                            genreViewModel.selectedMovie = movie
+                        }
+                    )
                 }
-            )
+                .buttonStyle(BorderlessButtonStyle())
+                .listStyle(PlainListStyle())
+                .scrollIndicators(.hidden)
+                .sheet(item: $genreViewModel.selectedMovie) { movie in
+                    DetailView(movie: movie)
+                }
+
+            case .failed:
+                Text("Error")
+                    .frame(maxHeight: .infinity, alignment: .center)
+            }
         }
         .task {
             await genreViewModel.getMoviesByGenreID(genreID: genre.id)
             genreViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
         }
-        .buttonStyle(BorderlessButtonStyle())
-        .listStyle(PlainListStyle())
-        .scrollIndicators(.hidden)
-        .navigationTitle(genre.rawValue)
-        .navigationBarTitleDisplayMode(.large)
-        .toolbarRole(.editor)
-        .sheet(item: $genreViewModel.selectedMovie) { movie in
-            DetailView(movie: movie)
-        }
         .toolbar {
             ThemeButton()
         }
+        .navigationTitle(genre.rawValue)
+        .navigationBarTitleDisplayMode(.large)
+        .toolbarRole(.editor)
     }
 }
 

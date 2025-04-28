@@ -12,12 +12,18 @@ class SearchViewModel {
     private let apiService: APIServiceProtocol
     private let movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol
     var searchText: String = ""
-    var movies: [Movie] = []
-    var networkError: String = ""
+    var loadingState = LoadingState<[Movie]>.idle
     var selectedMovie: Movie?
 
     var shouldShowGenreList: Bool {
-        movies.isEmpty
+        switch loadingState {
+        case .loading:
+            return searchText.isEmpty
+        case let .loaded(movies):
+            return movies.isEmpty
+        default:
+            return true
+        }
     }
 
     init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol) {
@@ -26,21 +32,29 @@ class SearchViewModel {
     }
 
     func initializeWatchlistStatus(watchlist: [WatchlistEntity]) {
-        movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
+        if case var .loaded(movies) = loadingState {
+            movies = movieWatchlistStatusService.addWatchListStatus(to: movies, watchlist: watchlist)
+            loadingState = .loaded(movies)
+        }
     }
 
     func toggleWatchlistStatus(movieID: Int) {
-        movies = movieWatchlistStatusService.toggleWatchlistFlag(for: movieID, movies: movies)
+        if case var .loaded(movies) = loadingState {
+            movies = movieWatchlistStatusService.toggleWatchlistFlag(for: movieID, movies: movies)
+            loadingState = .loaded(movies)
+        }
     }
 
     @MainActor
     func searchMovies() async {
+        loadingState = .loading
         do {
-            movies = try await apiService.searchMovies(by: searchText)
+            let movies = try await apiService.searchMovies(by: searchText)
+            loadingState = .loaded(movies)
         } catch let error as APIError {
-            networkError = error.localizedDescription
+            loadingState = .failed(error.localizedDescription)
         } catch {
-            networkError = "Something went wrong. Please try again"
+            loadingState = .failed("Something went wrong. Please try again")
         }
     }
 }

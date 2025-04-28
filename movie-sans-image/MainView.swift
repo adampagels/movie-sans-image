@@ -11,23 +11,23 @@ struct MainView: View {
     private let apiService = APIService()
     private let coreDataService = CoreDataService()
     private let movieWatchlistStatusService = MovieWatchlistStatusService()
-    @State var watchlistViewModel: WatchlistViewModel
-    @State var searchViewModel: SearchViewModel
-    @State var movieViewModel: MovieViewModel
+    var watchlistViewModel: WatchlistViewModel
+    var searchViewModel: SearchViewModel
+    var movieViewModel: MovieViewModel
     @State private var homeRouter = NavigationRouter()
     @State private var searchRouter = NavigationRouter()
     @State private var watchlistRouter = NavigationRouter()
 
     init() {
-        _watchlistViewModel = State(wrappedValue: WatchlistViewModel(coreDataService: coreDataService))
-        _movieViewModel = State(wrappedValue: MovieViewModel(
+        watchlistViewModel = WatchlistViewModel(coreDataService: coreDataService)
+        movieViewModel = MovieViewModel(
             apiService: apiService,
             movieWatchlistStatusService: movieWatchlistStatusService
-        ))
-        _searchViewModel = State(wrappedValue: SearchViewModel(
+        )
+        searchViewModel = SearchViewModel(
             apiService: apiService,
             movieWatchlistStatusService: movieWatchlistStatusService
-        ))
+        )
 
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
