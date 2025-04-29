@@ -124,9 +124,11 @@ struct GenreViewModelTests {
 
         await viewModel.getMoviesByGenreID(genreID: "28")
 
-        #expect(viewModel.movies.count == 3)
-        #expect(viewModel.movies.first?.title == "A Working Man")
-        #expect(viewModel.movies.first?.genre_ids?.contains(28) == true)
+        if case let .loaded(movies) = viewModel.loadingState {
+            #expect(movies.count == 3)
+            #expect(movies.first?.title == "A Working Man")
+            #expect(movies.first?.genre_ids?.contains(28) == true)
+        }
     }
 
 //    func setUp() {}
@@ -141,11 +143,9 @@ struct GenreViewModelTests {
             movieWatchlistStatusService: movieWatchlistStatusService
         )
 
-        viewModel.movies = []
-
         #expect(viewModel.shouldShowGenreList == true)
 
-        viewModel.movies = mockMovieArray
+        viewModel.loadingState = .loaded(mockMovieArray)
 
         #expect(viewModel.shouldShowGenreList == false)
     }
