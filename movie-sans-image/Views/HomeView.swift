@@ -16,6 +16,7 @@ struct HomeView: View {
             CategoryList(
                 selectedCategory: movieViewModel.selectedCategory,
                 onSelect: { (category: MovieListCategory) in
+                    guard movieViewModel.selectedCategory != category else { return }
                     movieViewModel.loadingState = .loading
                     withAnimation {
                         movieViewModel.selectedCategory = category
@@ -74,11 +75,16 @@ struct HomeView: View {
 }
 
 #Preview() {
-    HomeView(
-        movieViewModel: MovieViewModel(
-            apiService: APIService(),
-            movieWatchlistStatusService: MovieWatchlistStatusService()
-        ),
-        watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService())
-    )
+    NavigationStack {
+        HomeView(
+            movieViewModel: MovieViewModel(
+                apiService: APIService(),
+                movieWatchlistStatusService: MovieWatchlistStatusService()
+            ),
+            watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService())
+        )
+    }
+    .toolbar {
+        ThemeButton()
+    }
 }
