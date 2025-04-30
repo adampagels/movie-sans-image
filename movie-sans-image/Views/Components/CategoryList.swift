@@ -30,3 +30,7 @@ struct CategoryList: View {
         .listRowSeparator(.hidden)
     }
 }
+
+#Preview {
+    CategoryList(selectedCategory: .nowPlaying, onSelect: { _ in })
+}

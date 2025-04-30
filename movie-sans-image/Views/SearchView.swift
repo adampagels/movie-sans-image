@@ -38,16 +38,22 @@ struct SearchView: View {
                     Text("Search by genres")
                         .fontWeight(.bold)
                         .font(.title2)
+                        .listRowBackground(Color.backgroundColor)
                     LazyVGrid(
                         columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)],
                         spacing: 22
                     ) {
                         ForEach(MovieGenre.allCases, id: \.rawValue) { genre in
-                            NeubrutalContainerView(backgroundColor: genre.backgroundColor) {
+                            NeubrutalContainerView(
+                                backgroundColor: genre.backgroundColor,
+                                borderColor: .black
+                            ) {
                                 Text(genre.rawValue)
                                     .padding()
                                     .padding(.vertical)
                                     .fixedSize()
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.white)
                             }
                             .accessibility(addTraits: .isButton)
                             .accessibilityIdentifier("GenreListItem")
@@ -56,6 +62,7 @@ struct SearchView: View {
                             }
                         }
                     }
+                    .listRowBackground(Color.backgroundColor)
                     .listRowSeparator(.hidden)
                 }
                 .buttonStyle(BorderlessButtonStyle())
@@ -119,5 +126,6 @@ struct SearchView: View {
             ),
             router: NavigationRouter()
         )
+        .background(Color.backgroundColor)
     }
 }

@@ -14,7 +14,7 @@ struct MovieListItem: View {
     let onSelect: () -> Void
 
     var body: some View {
-        NeubrutalContainerView(backgroundColor: .secondaryColor) {
+        NeubrutalContainerView(backgroundColor: .secondaryColor, borderColor: Color.primaryColor) {
             HStack {
                 Text(movie.title)
                     .padding()
@@ -23,7 +23,7 @@ struct MovieListItem: View {
 
                 Button(action: toggleWatchlist) {
                     Image(systemName: isInWatchlist ? "checkmark" : "plus")
-                        .foregroundStyle(.black)
+                        .foregroundStyle(Color.tertiaryColor)
                         .fontWeight(.bold)
                 }
                 .padding()
@@ -33,5 +33,6 @@ struct MovieListItem: View {
             .accessibility(addTraits: .isButton)
             .accessibilityIdentifier("MovieListItem")
         }
+        .listRowBackground(Color.backgroundColor)
     }
 }

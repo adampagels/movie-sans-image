@@ -32,5 +32,6 @@ struct WatchlistView: View {
 #Preview {
     NavigationStack {
         WatchlistView(watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService()))
+            .listRowBackground(Color.backgroundColor)
     }
 }

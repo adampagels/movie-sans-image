@@ -65,6 +65,7 @@ struct HomeView: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .task {
+            movieViewModel.loadingState = .loading
             await movieViewModel.getMovies()
             movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
         }
@@ -83,6 +84,7 @@ struct HomeView: View {
             ),
             watchlistViewModel: WatchlistViewModel(coreDataService: CoreDataService())
         )
+        .background(Color.backgroundColor)
     }
     .toolbar {
         ThemeButton()

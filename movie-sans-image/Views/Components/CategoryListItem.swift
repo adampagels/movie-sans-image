@@ -13,13 +13,29 @@ struct CategoryListItem: View {
     let isSelected: Bool
 
     var body: some View {
-        NeubrutalContainerView(backgroundColor: isSelected ? .blue : .gray) {
-            Text(category.rawValue)
-                .padding()
-                .onTapGesture {
-                    onSelect(category)
-                }
-                .fixedSize()
-        }
+        NeubrutalContainerView(backgroundColor: isSelected ? Color(red: 207 / 255, green: 254 / 255, blue: 26 / 255) :
+            Color(
+                red: 211 / 255.0,
+                green: 211 / 255.0,
+                blue: 211 / 255.0
+            ), borderColor: .black) {
+                Text(category.rawValue)
+                    .font(.footnote)
+                    .foregroundStyle(.black)
+                    .padding()
+                    .fixedSize()
+            }
+            .onTapGesture {
+                onSelect(category)
+            }
+    }
+}
+
+#Preview {
+    HStack {
+        CategoryListItem(category: .nowPlaying, onSelect: { _ in }, isSelected: true)
+            .fixedSize()
+        CategoryListItem(category: .popular, onSelect: { _ in }, isSelected: false)
+            .fixedSize()
     }
 }

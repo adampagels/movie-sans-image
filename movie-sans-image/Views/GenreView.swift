@@ -19,7 +19,7 @@ struct GenreView: View {
 
             case .loading:
                 ProgressView()
-                    .frame(maxHeight: .infinity, alignment: .center)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 
             case let .loaded(movies):
                 List {
@@ -71,5 +71,6 @@ struct GenreView: View {
                 movieWatchlistStatusService: MovieWatchlistStatusService()
             )
         )
+        .background(Color.backgroundColor)
     }
 }

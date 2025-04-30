@@ -42,6 +42,7 @@ struct MainView: View {
             Tab("Home", systemImage: "house.fill") {
                 NavigationStack(path: $homeRouter.path) {
                     HomeView(movieViewModel: movieViewModel, watchlistViewModel: watchlistViewModel)
+                        .background(Color.backgroundColor)
                 }
             }
 
@@ -51,6 +52,7 @@ struct MainView: View {
                         watchlistViewModel: watchlistViewModel,
                         searchViewModel: searchViewModel, router: searchRouter
                     )
+                    .background(Color.backgroundColor)
                     .navigationDestination(for: Route.self) { route in
                         switch route {
                         case let .genre(genre):
@@ -62,6 +64,7 @@ struct MainView: View {
                                     movieWatchlistStatusService: movieWatchlistStatusService
                                 )
                             )
+                            .background(Color.backgroundColor)
                         }
                     }
                 }
@@ -71,6 +74,7 @@ struct MainView: View {
             Tab("Watchlist", systemImage: "list.bullet") {
                 NavigationStack(path: $watchlistRouter.path) {
                     WatchlistView(watchlistViewModel: watchlistViewModel)
+                        .background(Color.backgroundColor)
                 }
             }
         }

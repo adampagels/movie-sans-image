@@ -10,17 +10,21 @@ import SwiftUI
 struct DetailView: View {
     var movie: Movie
     var body: some View {
-        VStack {
-            Text(movie.title)
-                .font(.largeTitle)
-                .frame(maxWidth: .infinity, alignment: .topLeading)
-                .accessibilityIdentifier("DetailViewMovieTitle")
-            Text(movie.overview ?? "")
-                .font(.headline)
+        ZStack {
+            Color.backgroundColor
+                .edgesIgnoringSafeArea(.all)
+            VStack {
+                Text(movie.title)
+                    .font(.largeTitle)
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
+                    .accessibilityIdentifier("DetailViewMovieTitle")
+                Text(movie.overview ?? "")
+                    .font(.headline)
+            }
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("DetailViewSheet")
+            .padding()
         }
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("DetailViewSheet")
-        .padding()
     }
 }
 
@@ -44,4 +48,5 @@ struct DetailView: View {
         vote_count: nil,
         isInWatchlist: Optional(false)
     ))
+    .background(Color.backgroundColor)
 }
