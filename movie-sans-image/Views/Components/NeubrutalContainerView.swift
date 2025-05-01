@@ -19,6 +19,7 @@ struct NeubrutalContainerView<Content: View>: View {
 
             RoundedRectangle(cornerRadius: 8)
                 .foregroundColor(backgroundColor)
+                .brightness(-0.1)
 
             content
 

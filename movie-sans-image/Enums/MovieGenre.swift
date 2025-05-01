@@ -58,21 +58,21 @@ enum MovieGenre: String, CaseIterable {
         case .adventure: return Color.orange
         case .animation: return Color.yellow
         case .comedy: return Color.blue
-        case .crime: return Color(red: 0.5, green: 0.0, blue: 0.0) // Custom dark red
+        case .crime: return Color(red: 0.5, green: 0.0, blue: 0.0)
         case .documentary: return Color.gray
         case .drama: return Color.purple
         case .family: return Color.green
         case .fantasy: return Color.teal
         case .history: return Color.brown
-        case .horror: return Color.black
+        case .horror: return Color(red: 0.3, green: 0.3, blue: 0.3)
         case .music: return Color.pink
-        case .mystery: return Color.indigo // Standard SwiftUI color
-        case .romance: return Color.pink // Different shade of pink for romance
-        case .scienceFiction: return Color.cyan // Sci-fi often uses cyan
-        case .tvMovie: return Color(white: 0.9) // Light gray
-        case .thriller: return Color(red: 0.0, green: 0.4, blue: 0.0) // Custom dark green
-        case .war: return Color(red: 0.5, green: 0.25, blue: 0.0) // Custom dark brown
-        case .western: return Color(red: 0.76, green: 0.61, blue: 0.42) // Sandy brown
+        case .mystery: return Color.indigo
+        case .romance: return Color(red: 1.0, green: 0.5, blue: 0.75)
+        case .scienceFiction: return Color.cyan
+        case .tvMovie: return Color(white: 0.8)
+        case .thriller: return Color(red: 0.0, green: 0.4, blue: 0.0)
+        case .war: return Color(red: 0.5, green: 0.25, blue: 0.0)
+        case .western: return Color(red: 0.76, green: 0.61, blue: 0.42)
         }
     }
 }

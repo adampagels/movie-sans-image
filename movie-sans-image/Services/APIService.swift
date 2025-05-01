@@ -29,7 +29,7 @@ class APIService: APIServiceProtocol {
         }
 
         let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
+//        decoder.keyDecodingStrategy = .convertFromSnakeCase
         let decodedResponse = try decoder.decode(APIResponse.self, from: data)
         return decodedResponse.results
     }
