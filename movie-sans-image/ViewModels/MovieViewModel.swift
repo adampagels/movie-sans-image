@@ -36,6 +36,7 @@ class MovieViewModel {
 
     @MainActor
     func getMovies() async {
+        loadingState = .loading
         do {
             let movies = try await apiService.fetchMovies(by: selectedCategory)
             try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay to prevent UI flash

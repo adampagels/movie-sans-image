@@ -16,12 +16,13 @@ struct HomeView: View {
             CategoryList(
                 selectedCategory: movieViewModel.selectedCategory,
                 onSelect: { (category: MovieListCategory) in
-                    guard movieViewModel.selectedCategory != category else { return }
-                    movieViewModel.loadingState = .loading
-                    withAnimation {
-                        movieViewModel.selectedCategory = category
-                    }
+                    guard movieViewModel.selectedCategory != category,
+                          movieViewModel.loadingState != .loading else { return }
                     Task {
+                        withAnimation {
+                            movieViewModel.selectedCategory = category
+                        }
+
                         await movieViewModel.getMovies()
                         movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                     }
@@ -65,7 +66,6 @@ struct HomeView: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .task {
-            movieViewModel.loadingState = .loading
             await movieViewModel.getMovies()
             movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
         }
