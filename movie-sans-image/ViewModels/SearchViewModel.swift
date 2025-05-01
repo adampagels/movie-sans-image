@@ -14,6 +14,7 @@ class SearchViewModel {
     var searchText: String = ""
     var loadingState = LoadingState<[Movie]>.idle
     var selectedMovie: Movie?
+    var hasFocus: Bool = false
 
     var shouldShowGenreList: Bool {
         switch loadingState {
@@ -50,6 +51,7 @@ class SearchViewModel {
         loadingState = .loading
         do {
             let movies = try await apiService.searchMovies(by: searchText)
+            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay to prevent UI flash
             loadingState = .loaded(movies)
         } catch let error as APIError {
             loadingState = .failed(error.localizedDescription)

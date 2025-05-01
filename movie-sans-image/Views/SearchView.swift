@@ -11,26 +11,64 @@ struct SearchView: View {
     var watchlistViewModel: WatchlistViewModel
     @State var searchViewModel: SearchViewModel
     @State var router: NavigationRouter
+    @FocusState private var hasFocus: Bool
 
     var body: some View {
         VStack {
             HStack {
-                Image(systemName: "magnifyingglass")
-                TextField("Search for movies...", text: $searchViewModel.searchText)
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(Color.secondaryColor)
+                    TextField(
+                        "",
+                        text: $searchViewModel.searchText,
+                        prompt: Text("Search for movies")
+                            .foregroundColor(.gray)
+                    )
+                    .font(.callout)
+                    .focused($hasFocus)
+                    .tint(.secondaryColor)
                     .submitLabel(.search)
-                    .keyboardType(.numbersAndPunctuation)
+                    .keyboardType(.default)
                     .onSubmit {
+                        guard !searchViewModel.searchText.isEmpty else { return }
                         Task {
                             await searchViewModel.searchMovies()
                             searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                         }
                     }
+
+                    if !searchViewModel.searchText.isEmpty {
+                        Button(action: { searchViewModel.searchText = "" }) {
+                            Image(systemName: "xmark")
+                                .foregroundColor(Color.secondaryColor)
+                        }
+                    }
+                }
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.primaryColor))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(lineWidth: 3).foregroundColor(hasFocus ? Color.tertiaryColor : Color.clear)
+                )
+                .foregroundColor(Color.secondaryColor)
+                .onAppear { hasFocus = searchViewModel.hasFocus }
+                .onChange(of: hasFocus) { _, newValue in
+                    searchViewModel.hasFocus = newValue
+                }
+                .onChange(of: searchViewModel.hasFocus) { _, newValue in
+                    hasFocus = newValue
+                }
+
+                if hasFocus {
+                    Text("Cancel")
+                        .font(.footnote)
+                        .onTapGesture {
+                            hasFocus = false
+                        }
+                }
             }
-            .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.black, lineWidth: 2)
-            )
             .padding()
 
             if searchViewModel.shouldShowGenreList {

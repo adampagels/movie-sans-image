@@ -13,7 +13,7 @@ struct MovieList: View {
     let onSelect: (Movie) -> Void
 
     var body: some View {
-        ForEach(movies, id:\.id) { movie in
+        ForEach(movies, id: \.id) { movie in
             MovieListItem(
                 movie: movie,
                 isInWatchlist: movie.isInWatchlist ?? false,
