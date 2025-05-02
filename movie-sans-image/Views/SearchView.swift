@@ -25,6 +25,12 @@ struct SearchView: View {
                         prompt: Text("Search for movies")
                             .foregroundColor(.gray)
                     )
+                    .onChange(of: searchViewModel.searchText) { _, newValue in
+                        if newValue == "" {
+                            searchViewModel.shouldShowGenreList = true
+                            searchViewModel.shouldShowNoResultsMessage = false
+                        }
+                    }
                     .font(.callout)
                     .focused($hasFocus)
                     .tint(.secondaryColor)
@@ -117,6 +123,20 @@ struct SearchView: View {
                     .frame(maxHeight: .infinity, alignment: .center)
 
             case let .loaded(movies):
+                if searchViewModel.shouldShowNoResultsMessage {
+                    VStack(alignment: .center) {
+                        Text("Looks like we're out of that.")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        Text("Try searching for another movie and we'll see what we can do.")
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.gray)
+                    }
+                    .padding()
+                    .padding(.vertical)
+                }
+
                 if !searchViewModel.shouldShowGenreList {
                     List {
                         MovieList(
