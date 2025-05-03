@@ -142,9 +142,7 @@ struct SearchView: View {
                         MovieList(
                             movies: movies,
                             toggleWatchlist: { (movie: Movie) in
-                                withAnimation {
-                                    searchViewModel.toggleWatchlistStatus(movieID: movie.id)
-                                }
+                                searchViewModel.toggleWatchlistStatus(movieID: movie.id)
                                 watchlistViewModel.persistWatchlistChange(movie: movie)
                             },
                             onSelect: { (movie: Movie) in

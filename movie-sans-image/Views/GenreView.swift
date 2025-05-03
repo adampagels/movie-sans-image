@@ -26,9 +26,7 @@ struct GenreView: View {
                     MovieList(
                         movies: movies,
                         toggleWatchlist: { (movie: Movie) in
-                            withAnimation {
-                                genreViewModel.toggleWatchlistStatus(movieID: movie.id)
-                            }
+                            genreViewModel.toggleWatchlistStatus(movieID: movie.id)
                             watchlistViewModel.persistWatchlistChange(movie: movie)
                         },
                         onSelect: { (movie: Movie) in

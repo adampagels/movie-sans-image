@@ -27,7 +27,6 @@ struct MovieListItem: View {
                         .fontWeight(.bold)
                 }
                 .padding()
-                .contentTransition(.symbolEffect(.replace))
             }
             .onTapGesture(perform: onSelect)
             .accessibility(addTraits: .isButton)

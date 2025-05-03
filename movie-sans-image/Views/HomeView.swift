@@ -42,9 +42,7 @@ struct HomeView: View {
                     MovieList(
                         movies: movies,
                         toggleWatchlist: { (movie: Movie) in
-                            withAnimation {
-                                movieViewModel.toggleWatchlistStatus(movieID: movie.id)
-                            }
+                            movieViewModel.toggleWatchlistStatus(movieID: movie.id)
                             watchlistViewModel.persistWatchlistChange(movie: movie)
                         },
                         onSelect: { (movie: Movie) in
