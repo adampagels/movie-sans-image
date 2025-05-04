@@ -12,6 +12,7 @@ struct WatchlistListItem: View {
     let isWatched: Bool
     let toggleWatched: () -> Void
     let removeFromWatchlist: () -> Void
+    let onSelect: (WatchlistEntity) -> Void
 
     var body: some View {
         NeubrutalContainerView(backgroundColor: .secondaryColor, borderColor: Color.primaryColor) {
@@ -26,8 +27,11 @@ struct WatchlistListItem: View {
                 .padding()
                 .buttonStyle(.plain)
 
-                Text(movie.title ?? "")
+                Text(movie.title)
                     .strikethrough(isWatched)
+            }
+            .onTapGesture {
+                onSelect(movie)
             }
             .accessibility(addTraits: .isButton)
             .accessibilityIdentifier("WatchlistListItem")

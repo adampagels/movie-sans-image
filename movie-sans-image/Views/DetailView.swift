@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DetailView: View {
-    var movie: Movie
+    var movie: MovieDetailsDisplayable
     var body: some View {
         ZStack {
             Color.backgroundColor
@@ -29,24 +29,23 @@ struct DetailView: View {
 }
 
 #Preview() {
-    DetailView(movie: Movie(
-        adult: false,
-        backdrop_path: nil,
-        genre_ids: nil,
-        id: 1_195_506,
-        original_language: nil,
-        original_title: nil,
-        overview: Optional(
-            "When the girl of his dreams is kidnapped, everyman Nate turns his inability to feel pain into an unexpected strength in his fight to get her back."
-        ),
-        popularity: 482.0451,
-        poster_path: nil,
-        release_date: nil,
-        title: "Novocaine",
-        video: false,
-        vote_average: nil,
-        vote_count: nil,
-        isInWatchlist: Optional(false)
-    ))
-    .background(Color.backgroundColor)
+    DetailView(
+        movie: Movie(
+            adult: false,
+            backdrop_path: nil,
+            genre_ids: nil,
+            id: 1_195_506,
+            original_language: nil,
+            original_title: nil,
+            overview: "When the girl of his dreams is kidnapped, everyman Nate turns his inability to feel pain into an unexpected strength in his fight to get her back.",
+            popularity: 482.0451,
+            poster_path: "../img",
+            release_date: "01 -01 -2000",
+            title: "Novocaine",
+            video: false,
+            vote_average: 8,
+            vote_count: 6,
+            isInWatchlist: false
+        )
+    )
 }

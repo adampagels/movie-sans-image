@@ -11,6 +11,7 @@ import SwiftUI
 class WatchlistViewModel {
     private let coreDataService: CoreDataService
     var watchlist: [WatchlistEntity] = []
+    var selectedMovie: WatchlistEntity?
 
     init(coreDataService: CoreDataService) {
         self.coreDataService = coreDataService

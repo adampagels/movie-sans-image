@@ -11,6 +11,7 @@ struct WatchlistList: View {
     let movies: [WatchlistEntity]
     let toggleWatched: (WatchlistEntity) -> Void
     let removeFromWatchlist: (Int) -> Void
+    let onSelect: (WatchlistEntity) -> Void
 
     var body: some View {
         ForEach(movies) { movie in
@@ -22,7 +23,8 @@ struct WatchlistList: View {
                 },
                 removeFromWatchlist: {
                     removeFromWatchlist(Int(movie.id))
-                }
+                },
+                onSelect: onSelect
             )
         }
     }

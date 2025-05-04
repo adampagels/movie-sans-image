@@ -19,10 +19,16 @@ struct WatchlistView: View {
                 },
                 removeFromWatchlist: { (movieID: Int) in
                     watchlistViewModel.removeFromWatchlist(movieID: movieID)
+                },
+                onSelect: { movie in
+                    watchlistViewModel.selectedMovie = movie
                 }
             )
         }
         .listStyle(PlainListStyle())
+        .sheet(item: $watchlistViewModel.selectedMovie) { movie in
+            DetailView(movie: movie)
+        }
         .toolbar {
             ThemeButton()
         }

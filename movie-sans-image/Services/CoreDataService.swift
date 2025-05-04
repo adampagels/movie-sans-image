@@ -27,7 +27,7 @@ class CoreDataService: CoreDataServiceProtocol {
 
         newMovie.adult = movie.adult
         newMovie.backdrop_path = movie.backdrop_path
-        newMovie.id = Int64(movie.id)
+        newMovie.idRaw = Int64(movie.id)
         newMovie.original_title = movie.original_title
         newMovie.overview = movie.overview
         newMovie.popularity = movie.popularity
@@ -35,8 +35,8 @@ class CoreDataService: CoreDataServiceProtocol {
         newMovie.release_date = movie.release_date
         newMovie.title = movie.title
         newMovie.video = movie.video
-        newMovie.vote_average = movie.vote_average ?? 0.0
-        newMovie.vote_count = Int16(movie.vote_count ?? 0)
+        newMovie.vote_averageRaw = movie.vote_average ?? 0.0
+        newMovie.vote_countRaw = Int16(movie.vote_count ?? 0)
         newMovie.isWatched = false
 //        newMovie.genre_ids = movie.genre_ids
 
