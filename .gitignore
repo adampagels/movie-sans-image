@@ -69,3 +69,5 @@ Config.plist
 # Supabase
 #
 supabase/
+
+*.xcodeproj/xcshareddata/
