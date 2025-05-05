@@ -87,19 +87,22 @@ Movie(
 )]
 
 class MockAPIService: APIServiceProtocol {
-    func discoverMovies(with genreID: String) async throws -> [Movie] {
-        if genreID == "28" { // Action genre
-            return mockMovieArray
-        }
-        return []
+    private var movieResults: [Movie]
+
+    init(movieResults: [Movie] = []) {
+        self.movieResults = movieResults
+    }
+
+    func discoverMovies(with _: String) async throws -> [Movie] {
+        return movieResults
     }
 
     func fetchMovies(by _: MovieListCategory) async throws -> [Movie] {
-        return []
+        return movieResults
     }
 
     func searchMovies(by _: String) async throws -> [Movie] {
-        return mockMovieArray
+        return movieResults
     }
 }
 
@@ -135,8 +138,8 @@ struct GenreViewModelTests {
 //
 //    func tearDown() {}
 
-    @Test func shouldShowGenreListWhenThereAreNoSearchResults() {
-        let apiService = MockAPIService()
+    @Test func shouldNotShowGenreListWhenThereAreNoSearchResults() async {
+        let apiService = MockAPIService(movieResults: mockMovieArray)
         let movieWatchlistStatusService = MockMovieWatchlistStatusService()
         let viewModel = SearchViewModel(
             apiService: apiService,
@@ -145,9 +148,24 @@ struct GenreViewModelTests {
 
         #expect(viewModel.shouldShowGenreList == true)
 
-        viewModel.loadingState = .loaded(mockMovieArray)
+        await viewModel.searchMovies()
 
         #expect(viewModel.shouldShowGenreList == false)
+    }
+
+    @Test func shouldShowNoResultsMessageWhenThereAreNoSearchResults() async {
+        let apiService = MockAPIService(movieResults: [])
+        let movieWatchlistStatusService = MockMovieWatchlistStatusService()
+        let viewModel = SearchViewModel(
+            apiService: apiService,
+            movieWatchlistStatusService: movieWatchlistStatusService
+        )
+
+        #expect(viewModel.shouldShowNoResultsMessage == false)
+
+        await viewModel.searchMovies()
+
+        #expect(viewModel.shouldShowNoResultsMessage == true)
     }
 }
 
@@ -175,7 +193,7 @@ struct MovieWatchlistStatusServiceTests {
 
         let context = MockPersistenceController().viewContext
         let watchlistEntity = movie_sans_image.WatchlistEntity(context: context)
-        watchlistEntity.id = 1
+        watchlistEntity.idRaw = 1
 
         let watchlist = [watchlistEntity]
 
