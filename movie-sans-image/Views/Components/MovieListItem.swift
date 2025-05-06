@@ -26,6 +26,7 @@ struct MovieListItem: View {
                         .foregroundStyle(Color.tertiaryColor)
                         .fontWeight(.bold)
                 }
+                .sensoryFeedback(.impact(weight: .heavy), trigger: isInWatchlist)
                 .padding()
             }
             .onTapGesture(perform: onSelect)

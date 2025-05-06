@@ -24,6 +24,7 @@ struct WatchlistListItem: View {
                         .imageScale(.large)
                         .foregroundStyle(Color.tertiaryColor)
                 }
+                .sensoryFeedback(.impact(weight: .heavy), trigger: isWatched)
                 .padding()
                 .buttonStyle(.plain)
 
