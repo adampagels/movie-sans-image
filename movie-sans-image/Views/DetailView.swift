@@ -13,16 +13,41 @@ struct DetailView: View {
         ZStack {
             Color.backgroundColor
                 .edgesIgnoringSafeArea(.all)
-            VStack {
-                Text(movie.title)
+            VStack(alignment: .leading, spacing: 16) {
+                Text("\(movie.title)")
                     .font(.largeTitle)
+                    .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .topLeading)
                     .accessibilityIdentifier("DetailViewMovieTitle")
+
+                HStack {
+                    if movie.vote_count ?? 0 > 0 {
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundStyle(Color.tertiaryColor)
+                                .fontWeight(.bold)
+
+                            Text("\(movie.vote_average ?? 0, specifier: "%.1f")/10")
+                            Text("(\(movie.vote_count ?? 0) reviews)")
+                        }
+                    }
+
+                    Spacer()
+                }
+
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundStyle(Color.tertiaryColor)
+                        .fontWeight(.bold)
+                    Text(movie.release_date ?? "")
+                }
                 Text(movie.overview ?? "")
                     .font(.headline)
+                Spacer()
             }
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("DetailViewSheet")
+            .padding()
             .padding()
         }
     }
@@ -40,10 +65,10 @@ struct DetailView: View {
             overview: "When the girl of his dreams is kidnapped, everyman Nate turns his inability to feel pain into an unexpected strength in his fight to get her back.",
             popularity: 482.0451,
             poster_path: "../img",
-            release_date: "01 -01 -2000",
+            release_date: "2000-01-01",
             title: "Novocaine",
             video: false,
-            vote_average: 8,
+            vote_average: 8.0,
             vote_count: 6,
             isInWatchlist: false
         )
