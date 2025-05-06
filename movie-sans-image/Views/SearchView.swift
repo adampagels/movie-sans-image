@@ -37,7 +37,11 @@ struct SearchView: View {
                     .submitLabel(.search)
                     .keyboardType(.default)
                     .onSubmit {
-                        guard !searchViewModel.searchText.isEmpty else { return }
+                        guard !searchViewModel.searchText.isEmpty else {
+                            return withAnimation(.default) {
+                                searchViewModel.attempts += 1
+                            }
+                        }
                         Task {
                             await searchViewModel.searchMovies()
                             searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
@@ -66,6 +70,8 @@ struct SearchView: View {
                 .onChange(of: searchViewModel.hasFocus) { _, newValue in
                     hasFocus = newValue
                 }
+                .sensoryFeedback(.error, trigger: searchViewModel.attempts)
+                .modifier(Shake(animatableData: CGFloat(searchViewModel.attempts)))
 
                 if hasFocus {
                     Text("Cancel")
@@ -183,5 +189,17 @@ struct SearchView: View {
             router: NavigationRouter()
         )
         .background(Color.backgroundColor)
+    }
+}
+
+struct Shake: GeometryEffect {
+    var amount: CGFloat = 10
+    var shakesPerUnit = 3
+    var animatableData: CGFloat
+
+    func effectValue(size _: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(translationX:
+            amount * sin(animatableData * .pi * CGFloat(shakesPerUnit)),
+            y: 0))
     }
 }

@@ -17,6 +17,7 @@ class SearchViewModel {
     var hasFocus: Bool = false
     var shouldShowNoResultsMessage: Bool = false
     var shouldShowGenreList: Bool = true
+    var attempts: Int = 0
 
     init(apiService: APIServiceProtocol, movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol) {
         self.apiService = apiService
