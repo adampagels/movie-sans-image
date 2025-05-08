@@ -8,6 +8,7 @@
 @testable import movie_sans_image
 import Testing
 
+@MainActor
 struct CoreDataServiceTests {
     @Test func fetchWatchlistFromCoreData() {
         let service = CoreDataService(container: MockPersistenceController().persistentContainer)
