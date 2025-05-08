@@ -17,12 +17,15 @@ struct GenreViewModelTests {
             movieWatchlistStatusService: movieWatchlistStatusService
         )
 
-        await viewModel.getMoviesByGenreID(genreID: "28")
+        let genreID = "28"
+
+        await viewModel.getMoviesByGenreID(genreID: genreID)
 
         if case let .loaded(movies) = viewModel.loadingState {
+            #expect(apiService.lastDiscoverQuery == genreID)
             #expect(movies.count == 3)
-            #expect(movies.first?.title == "A Working Man")
-            #expect(movies.first?.genre_ids?.contains(28) == true)
+        } else {
+            #expect(Bool(false), "Expected .loaded state but got \(viewModel.loadingState)")
         }
     }
 

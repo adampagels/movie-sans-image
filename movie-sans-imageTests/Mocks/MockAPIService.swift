@@ -11,20 +11,26 @@ import Testing
 
 class MockAPIService: APIServiceProtocol {
     private var movieResults: [Movie]
+    var lastDiscoverQuery: String = ""
+    var lastFetchCategory: MovieListCategory = .popular
+    var lastSearchQuery: String = ""
 
     init(movieResults: [Movie] = []) {
         self.movieResults = movieResults
     }
 
-    func discoverMovies(with _: String) async throws -> [Movie] {
+    func discoverMovies(with query: String) async throws -> [Movie] {
+        lastDiscoverQuery = query
         return movieResults
     }
 
-    func fetchMovies(by _: MovieListCategory) async throws -> [Movie] {
+    func fetchMovies(by category: MovieListCategory) async throws -> [Movie] {
+        lastFetchCategory = category
         return movieResults
     }
 
-    func searchMovies(by _: String) async throws -> [Movie] {
+    func searchMovies(by query: String) async throws -> [Movie] {
+        lastSearchQuery = query
         return movieResults
     }
 }

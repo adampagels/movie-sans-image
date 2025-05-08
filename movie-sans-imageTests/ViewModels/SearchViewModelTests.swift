@@ -8,7 +8,7 @@
 @testable import movie_sans_image
 import Testing
 
-struct ViewModelTests {
+struct SearchViewModelTests {
     @Test func shouldNotShowGenreListWhenThereAreNoSearchResults() async {
         let apiService = MockAPIService(movieResults: mockMovieArray)
         let movieWatchlistStatusService = MovieWatchlistStatusService()
@@ -115,6 +115,27 @@ struct ViewModelTests {
             )
         } else {
             #expect(Bool(false), "Movie list is not loaded")
+        }
+    }
+
+    @Test func fetchMoviesbyTitle() async throws {
+        let apiService = MockAPIService(movieResults: mockMovieArray)
+        let movieWatchlistStatusService = MovieWatchlistStatusService()
+        let viewModel = SearchViewModel(
+            apiService: apiService,
+            movieWatchlistStatusService: movieWatchlistStatusService
+        )
+
+        viewModel.searchText = "working"
+
+        await viewModel.searchMovies()
+
+        if case let .loaded(movies) = viewModel.loadingState {
+            #expect(apiService.lastSearchQuery == viewModel.searchText)
+            #expect(movies.count == 3)
+            #expect(movies.first?.title == "A Working Man")
+        } else {
+            #expect(Bool(false), "Expected .loaded state but got \(viewModel.loadingState)")
         }
     }
 }
