@@ -138,4 +138,23 @@ struct SearchViewModelTests {
             #expect(Bool(false), "Expected .loaded state but got \(viewModel.loadingState)")
         }
     }
+
+    @Test func handleErrorProperly() async {
+        let apiService = MockAPIService(movieResults: mockMovieArray, errorToThrow: APIError.serverError)
+        let movieWatchlistStatusService = MovieWatchlistStatusService()
+        let viewModel = SearchViewModel(
+            apiService: apiService,
+            movieWatchlistStatusService: movieWatchlistStatusService
+        )
+
+        viewModel.searchText = "working"
+
+        await viewModel.searchMovies()
+
+        if case let .failed(message) = viewModel.loadingState {
+            #expect(message == APIError.serverError.localizedDescription)
+        } else {
+            #expect(Bool(false), "Expected .failed state but got \(viewModel.loadingState)")
+        }
+    }
 }

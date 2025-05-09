@@ -107,4 +107,23 @@ struct GenreViewModelTests {
             #expect(Bool(false), "Movie list is not loaded")
         }
     }
+
+    @Test func handleErrorProperly() async {
+        let apiService = MockAPIService(movieResults: mockMovieArray, errorToThrow: APIError.serverError)
+        let movieWatchlistStatusService = MovieWatchlistStatusService()
+        let viewModel = GenreViewModel(
+            apiService: apiService,
+            movieWatchlistStatusService: movieWatchlistStatusService
+        )
+
+        let genreID = "28"
+
+        await viewModel.getMoviesByGenreID(genreID: genreID)
+
+        if case let .failed(message) = viewModel.loadingState {
+            #expect(message == APIError.serverError.localizedDescription)
+        } else {
+            #expect(Bool(false), "Expected .failed state but got \(viewModel.loadingState)")
+        }
+    }
 }

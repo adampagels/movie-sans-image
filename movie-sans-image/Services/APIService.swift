@@ -24,14 +24,26 @@ class APIService: APIServiceProtocol {
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
-        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+        guard let httpResponse = response as? HTTPURLResponse else {
             throw APIError.invalidResponse
         }
 
-        let decoder = JSONDecoder()
-//        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let decodedResponse = try decoder.decode(APIResponse.self, from: data)
-        return decodedResponse.results
+        switch httpResponse.statusCode {
+        case 200 ..< 300:
+            let decoder = JSONDecoder()
+            do {
+                let decodedResponse = try decoder.decode(APIResponse.self, from: data)
+                return decodedResponse.results
+            } catch {
+                throw APIError.failedToDecode
+            }
+        case 400 ..< 500:
+            throw APIError.clientError
+        case 500 ..< 600:
+            throw APIError.serverError
+        default:
+            throw APIError.invalidResponse
+        }
     }
 
     func fetchMovies(by category: MovieListCategory) async throws -> [Movie] {
@@ -56,14 +68,29 @@ class APIService: APIServiceProtocol {
 
 enum APIError: Error, LocalizedError {
     case invalidURL
+    case connectionFailed
+    case clientError
+    case serverError
     case invalidResponse
     case invalidData
+    case failedToDecode
 
     var errorDescription: String? {
         switch self {
-        case .invalidURL: return "URL is invalid, please try again"
-        case .invalidResponse: return "Response was invalid. please try again"
-        case .invalidData: return "Data was invalid. please try again"
+        case .invalidURL:
+            return "Something went wrong with the request. Please try again later."
+        case .connectionFailed:
+            return "We couldn't connect to the internet. Please check your connection and try again."
+        case .clientError:
+            return "There was an issue with your request. Please check and try again."
+        case .serverError:
+            return "Our servers are having trouble right now. Please try again shortly."
+        case .invalidResponse:
+            return "We received an unexpected response. Please try again later."
+        case .invalidData:
+            return "Something went wrong while processing the data. Please try again."
+        case .failedToDecode:
+            return "We couldn’t read the information properly. Please try again later."
         }
     }
 }
