@@ -41,10 +41,8 @@ class MovieViewModel {
             let movies = try await apiService.fetchMovies(by: selectedCategory)
             try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay to prevent UI flash
             loadingState = .loaded(movies)
-        } catch let error as APIError {
-            loadingState = .failed(error.localizedDescription)
         } catch {
-            loadingState = .failed("Something went wrong. Please try again")
+            loadingState = .failed(error.localizedDescription)
         }
     }
 }

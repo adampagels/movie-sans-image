@@ -22,27 +22,39 @@ class APIService: APIServiceProtocol {
             "Authorization": "Bearer \(Config.apiKey)",
         ]
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
 
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw APIError.invalidResponse
-        }
-
-        switch httpResponse.statusCode {
-        case 200 ..< 300:
-            let decoder = JSONDecoder()
-            do {
-                let decodedResponse = try decoder.decode(APIResponse.self, from: data)
-                return decodedResponse.results
-            } catch {
-                throw APIError.failedToDecode
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw APIError.invalidResponse
             }
-        case 400 ..< 500:
-            throw APIError.clientError
-        case 500 ..< 600:
-            throw APIError.serverError
-        default:
-            throw APIError.invalidResponse
+
+            switch httpResponse.statusCode {
+            case 200 ..< 300:
+                do {
+                    let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                    return decodedResponse.results
+                } catch {
+                    throw APIError.failedToDecode
+                }
+
+            case 400 ..< 500:
+                throw APIError.clientError
+            case 500 ..< 600:
+                throw APIError.serverError
+            default:
+                throw APIError.invalidResponse
+            }
+
+        } catch let urlError as URLError {
+            switch urlError.code {
+            case .notConnectedToInternet, .dataNotAllowed, .internationalRoamingOff, .timedOut:
+                throw APIError.connectionFailed
+            case .badURL, .unsupportedURL:
+                throw APIError.invalidURL
+            default:
+                throw APIError.underlying(urlError)
+            }
         }
     }
 
@@ -74,6 +86,7 @@ enum APIError: Error, LocalizedError {
     case invalidResponse
     case invalidData
     case failedToDecode
+    case underlying(Error)
 
     var errorDescription: String? {
         switch self {
@@ -91,6 +104,8 @@ enum APIError: Error, LocalizedError {
             return "Something went wrong while processing the data. Please try again."
         case .failedToDecode:
             return "We couldn’t read the information properly. Please try again later."
+        case let .underlying(error):
+            return error.localizedDescription
         }
     }
 }

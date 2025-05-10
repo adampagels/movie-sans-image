@@ -38,10 +38,8 @@ class GenreViewModel {
         do {
             let movies = try await apiService.discoverMovies(with: genreID)
             loadingState = .loaded(movies)
-        } catch let error as APIError {
-            loadingState = .failed(error.localizedDescription)
         } catch {
-            loadingState = .failed("Something went wrong. Please try again")
+            loadingState = .failed(error.localizedDescription)
         }
     }
 }

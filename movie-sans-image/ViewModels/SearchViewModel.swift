@@ -49,11 +49,8 @@ class SearchViewModel {
             if movies.isEmpty {
                 shouldShowNoResultsMessage = true
             }
-
-        } catch let error as APIError {
-            loadingState = .failed(error.localizedDescription)
         } catch {
-            loadingState = .failed("Something went wrong. Please try again")
+            loadingState = .failed(error.localizedDescription)
         }
     }
 }
