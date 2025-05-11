@@ -8,28 +8,28 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var movieViewModel: MovieViewModel
+    @State var homeViewModel: HomeViewModel
     var watchlistViewModel: WatchlistViewModel
 
     var body: some View {
         VStack {
             CategoryList(
-                selectedCategory: movieViewModel.selectedCategory,
+                selectedCategory: homeViewModel.selectedCategory,
                 onSelect: { (category: MovieListCategory) in
-                    guard movieViewModel.selectedCategory != category,
-                          movieViewModel.loadingState != .loading else { return }
+                    guard homeViewModel.selectedCategory != category,
+                          homeViewModel.loadingState != .loading else { return }
                     Task {
                         withAnimation {
-                            movieViewModel.selectedCategory = category
+                            homeViewModel.selectedCategory = category
                         }
 
-                        await movieViewModel.getMovies()
-                        movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+                        await homeViewModel.getMovies()
+                        homeViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                     }
                 }
             )
 
-            switch movieViewModel.loadingState {
+            switch homeViewModel.loadingState {
             case .idle:
                 EmptyView()
 
@@ -42,18 +42,18 @@ struct HomeView: View {
                     MovieList(
                         movies: movies,
                         toggleWatchlist: { (movie: Movie) in
-                            movieViewModel.toggleWatchlistStatus(movieID: movie.id)
+                            homeViewModel.toggleWatchlistStatus(movieID: movie.id)
                             watchlistViewModel.persistWatchlistChange(movie: movie)
                         },
                         onSelect: { (movie: Movie) in
-                            movieViewModel.selectedMovie = movie
+                            homeViewModel.selectedMovie = movie
                         }
                     )
                 }
                 .buttonStyle(BorderlessButtonStyle())
                 .listStyle(PlainListStyle())
                 .scrollIndicators(.hidden)
-                .sheet(item: $movieViewModel.selectedMovie) { movie in
+                .sheet(item: $homeViewModel.selectedMovie) { movie in
                     DetailView(movie: movie)
                 }
 
@@ -64,8 +64,8 @@ struct HomeView: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .task {
-            await movieViewModel.getMovies()
-            movieViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+            await homeViewModel.getMovies()
+            homeViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
         }
         .toolbar {
             ThemeButton()
@@ -76,7 +76,7 @@ struct HomeView: View {
 #Preview() {
     NavigationStack {
         HomeView(
-            movieViewModel: MovieViewModel(
+            homeViewModel: HomeViewModel(
                 apiService: APIService(),
                 movieWatchlistStatusService: MovieWatchlistStatusService()
             ),

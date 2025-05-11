@@ -1,5 +1,5 @@
 //
-//  MovieViewModel.swift
+//  HomeViewModel.swift
 //  movie-sans-image
 //
 //  Created by Adam Pagels on 2025-04-04.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @Observable
-class MovieViewModel {
+class HomeViewModel {
     private let apiService: APIServiceProtocol
     private let movieWatchlistStatusService: MovieWatchlistStatusServiceProtocol
     var loadingState = LoadingState<[Movie]>.idle

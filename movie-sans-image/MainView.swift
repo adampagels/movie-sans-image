@@ -13,14 +13,14 @@ struct MainView: View {
     private let movieWatchlistStatusService = MovieWatchlistStatusService()
     var watchlistViewModel: WatchlistViewModel
     var searchViewModel: SearchViewModel
-    var movieViewModel: MovieViewModel
+    var homeViewModel: HomeViewModel
     @State private var homeRouter = NavigationRouter()
     @State private var searchRouter = NavigationRouter()
     @State private var watchlistRouter = NavigationRouter()
 
     init() {
         watchlistViewModel = WatchlistViewModel(coreDataService: coreDataService)
-        movieViewModel = MovieViewModel(
+        homeViewModel = HomeViewModel(
             apiService: apiService,
             movieWatchlistStatusService: movieWatchlistStatusService
         )
@@ -41,7 +41,7 @@ struct MainView: View {
         TabView {
             Tab("Home", systemImage: "house.fill") {
                 NavigationStack(path: $homeRouter.path) {
-                    HomeView(movieViewModel: movieViewModel, watchlistViewModel: watchlistViewModel)
+                    HomeView(homeViewModel: homeViewModel, watchlistViewModel: watchlistViewModel)
                         .background(Color.backgroundColor)
                 }
             }
