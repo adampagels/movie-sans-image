@@ -96,7 +96,8 @@ struct SearchView: View {
                         ForEach(MovieGenre.allCases, id: \.rawValue) { genre in
                             NeubrutalContainerView(
                                 backgroundColor: genre.backgroundColor,
-                                borderColor: Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255)
+                                borderColor: Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255),
+                                shadowStyle: .large
                             ) {
                                 Text(genre.rawValue)
                                     .padding()

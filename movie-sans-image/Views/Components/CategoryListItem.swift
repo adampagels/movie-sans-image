@@ -18,7 +18,7 @@ struct CategoryListItem: View {
                 red: 211 / 255.0,
                 green: 211 / 255.0,
                 blue: 211 / 255.0
-            ), borderColor: Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255)) {
+            ), borderColor: Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255), shadowStyle: .large) {
                 Text(category.rawValue)
                     .font(.footnote)
                     .foregroundStyle(Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255))

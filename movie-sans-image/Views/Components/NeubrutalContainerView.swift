@@ -10,12 +10,13 @@ import SwiftUI
 struct NeubrutalContainerView<Content: View>: View {
     let backgroundColor: Color
     let borderColor: Color
+    let shadowStyle: NeubrutalShadowStyle
     @ViewBuilder var content: Content
 
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 8)
-                .offset(x: 3, y: 5)
+                .offset(shadowStyle.shadowOffset)
 
             RoundedRectangle(cornerRadius: 8)
                 .foregroundColor(backgroundColor)
@@ -31,7 +32,7 @@ struct NeubrutalContainerView<Content: View>: View {
 }
 
 #Preview {
-    NeubrutalContainerView(backgroundColor: .secondaryColor, borderColor: Color.primaryColor) {
+    NeubrutalContainerView(backgroundColor: .secondaryColor, borderColor: Color.primaryColor, shadowStyle: .large) {
         Text("inside container text")
             .padding()
     }

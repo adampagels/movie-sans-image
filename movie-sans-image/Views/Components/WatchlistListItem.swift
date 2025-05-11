@@ -15,7 +15,7 @@ struct WatchlistListItem: View {
     let onSelect: (WatchlistEntity) -> Void
 
     var body: some View {
-        NeubrutalContainerView(backgroundColor: .secondaryColor, borderColor: Color.primaryColor) {
+        NeubrutalContainerView(backgroundColor: .secondaryColor, borderColor: Color.primaryColor, shadowStyle: .large) {
             HStack {
                 Button(action: {
                     toggleWatched()
