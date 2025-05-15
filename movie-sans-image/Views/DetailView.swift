@@ -15,8 +15,7 @@ struct DetailView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack(alignment: .leading, spacing: 16) {
                 Text("\(movie.title)")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                    .font(.custom("Futura-Bold", size: 32))
                     .frame(maxWidth: .infinity, alignment: .topLeading)
                     .accessibilityIdentifier("DetailViewMovieTitle")
 
@@ -28,7 +27,10 @@ struct DetailView: View {
                                 .fontWeight(.bold)
 
                             Text("\(movie.vote_average ?? 0, specifier: "%.1f")/10")
+                                .font(.custom("Futura", size: 16))
+
                             Text("(\(movie.vote_count ?? 0) reviews)")
+                                .font(.custom("Futura", size: 16))
                         }
                     }
 
@@ -40,9 +42,10 @@ struct DetailView: View {
                         .foregroundStyle(Color.tertiaryColor)
                         .fontWeight(.bold)
                     Text(movie.release_date ?? "")
+                        .font(.custom("Futura", size: 16))
                 }
                 Text(movie.overview ?? "")
-                    .font(.headline)
+                    .font(.custom("Avenir", size: 18))
                 Spacer()
             }
             .accessibilityElement(children: .contain)

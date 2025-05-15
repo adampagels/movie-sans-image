@@ -17,6 +17,7 @@ struct MovieListItem: View {
         NeubrutalContainerView(backgroundColor: .secondaryColor, borderColor: Color.primaryColor, shadowStyle: .large) {
             HStack {
                 Text(movie.title)
+                    .font(.custom("Futura", size: 18))
                     .padding()
 
                 Spacer()

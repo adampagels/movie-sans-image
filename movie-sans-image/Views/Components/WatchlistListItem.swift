@@ -30,6 +30,7 @@ struct WatchlistListItem: View {
 
                 Text(movie.title)
                     .strikethrough(isWatched)
+                    .font(.custom("Futura", size: 18))
             }
             .onTapGesture {
                 onSelect(movie)

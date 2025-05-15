@@ -33,6 +33,8 @@ struct MainView: View {
         tabBarAppearance.configureWithOpaqueBackground()
         tabBarAppearance.backgroundColor = UIColor.systemBackground
 
+        UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Futura-Bold", size: 30)!]
+
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }

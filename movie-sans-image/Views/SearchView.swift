@@ -25,6 +25,7 @@ struct SearchView: View {
                         prompt: Text("Search for movies")
                             .foregroundColor(.gray)
                     )
+                    .font(.custom("Futura", size: 16))
                     .onChange(of: searchViewModel.searchText) { _, newValue in
                         if newValue == "" {
                             searchViewModel.shouldShowGenreList = true
@@ -75,7 +76,7 @@ struct SearchView: View {
 
                 if hasFocus {
                     Text("Cancel")
-                        .font(.footnote)
+                        .font(.custom("Futura", size: 12))
                         .onTapGesture {
                             hasFocus = false
                         }
@@ -85,9 +86,8 @@ struct SearchView: View {
 
             if searchViewModel.shouldShowGenreList {
                 List {
-                    Text("Search by genres")
-                        .fontWeight(.bold)
-                        .font(.title2)
+                    Text("Discover by genre")
+                        .font(.custom("Futura-Bold", size: 17))
                         .listRowBackground(Color.backgroundColor)
                     LazyVGrid(
                         columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)],
@@ -103,8 +103,8 @@ struct SearchView: View {
                                     .padding()
                                     .padding(.vertical)
                                     .fixedSize()
-                                    .fontWeight(.bold)
                                     .foregroundStyle(.white)
+                                    .font(.custom("Futura-Bold", size: 16))
                             }
                             .accessibility(addTraits: .isButton)
                             .accessibilityIdentifier("GenreListItem")

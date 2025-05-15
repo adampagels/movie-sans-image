@@ -20,7 +20,7 @@ struct CategoryListItem: View {
                 blue: 211 / 255.0
             ), borderColor: Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255), shadowStyle: .large) {
                 Text(category.rawValue)
-                    .font(.footnote)
+                    .font(.custom("Futura", size: 12))
                     .foregroundStyle(Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255))
                     .padding()
                     .fixedSize()
