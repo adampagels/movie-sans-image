@@ -19,30 +19,28 @@ struct DetailView: View {
                     .frame(maxWidth: .infinity, alignment: .topLeading)
                     .accessibilityIdentifier("DetailViewMovieTitle")
 
-                HStack {
-                    if movie.vote_count ?? 0 > 0 {
-                        HStack {
-                            Image(systemName: "star.fill")
-                                .foregroundStyle(Color.tertiaryColor)
-                                .fontWeight(.bold)
+                if movie.vote_count ?? 0 > 0 {
+                    HStack {
+                        Image(systemName: "star.fill")
+                            .foregroundStyle(Color.tertiaryColor)
+                            .fontWeight(.bold)
 
-                            Text("\(movie.vote_average ?? 0, specifier: "%.1f")/10")
-                                .font(.custom("Futura", size: 16))
+                        Text("\(movie.vote_average ?? 0, specifier: "%.1f")/10")
+                            .font(.custom("Futura", size: 16))
 
-                            Text("(\(movie.vote_count ?? 0) reviews)")
-                                .font(.custom("Futura", size: 16))
-                        }
+                        Text("(\(movie.vote_count ?? 0) reviews)")
+                            .font(.custom("Futura", size: 16))
                     }
-
-                    Spacer()
                 }
 
-                HStack {
-                    Image(systemName: "calendar")
-                        .foregroundStyle(Color.tertiaryColor)
-                        .fontWeight(.bold)
-                    Text(movie.release_date ?? "")
-                        .font(.custom("Futura", size: 16))
+                if movie.release_date != nil {
+                    HStack {
+                        Image(systemName: "calendar")
+                            .foregroundStyle(Color.tertiaryColor)
+                            .fontWeight(.bold)
+                        Text(movie.release_date ?? "")
+                            .font(.custom("Futura", size: 16))
+                    }
                 }
                 Text(movie.overview ?? "")
                     .font(.custom("Avenir", size: 18))
