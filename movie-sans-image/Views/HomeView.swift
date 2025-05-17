@@ -23,7 +23,7 @@ struct HomeView: View {
                             homeViewModel.selectedCategory = category
                         }
 
-                        await homeViewModel.getMovies()
+                        await homeViewModel.getMovies(showLoading: true)
                         homeViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                     }
                 }
@@ -50,6 +50,10 @@ struct HomeView: View {
                         }
                     )
                 }
+                .refreshable(action: {
+                    await homeViewModel.getMovies(showLoading: false)
+                    homeViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+                })
                 .buttonStyle(BorderlessButtonStyle())
                 .listStyle(PlainListStyle())
                 .scrollIndicators(.hidden)
@@ -64,7 +68,7 @@ struct HomeView: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .task {
-            await homeViewModel.getMovies()
+            await homeViewModel.getMovies(showLoading: true)
             homeViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
         }
         .toolbar {
