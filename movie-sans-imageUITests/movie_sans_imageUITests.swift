@@ -94,13 +94,28 @@ final class movie_sans_imageUITests: XCTestCase {
         XCTAssertTrue(movieItemInHomeView.exists)
     }
 
-    @MainActor
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+    func testSearchBarFocusStates() {
+        app.tabBars["Tab Bar"].buttons["Search"].tap()
+        let searchBarCancelButton = app.staticTexts["SearchBarCancelButton"]
+        let searchBar = app.textFields["SearchBar"]
+
+        searchBar.tap()
+        XCTAssertTrue(searchBarCancelButton.exists)
+        XCTAssertEqual(searchBar.value as? String, "focused", "Search bar should be focused after tapping")
+
+        searchBarCancelButton.tap()
+
+        XCTAssertEqual(searchBar.value as? String, "unfocused", "Search bar should be unfocused after tapping cancel")
+        XCTAssertFalse(searchBarCancelButton.exists, "Cancel button should not be visible when search bar is unfocused")
     }
+
+//    @MainActor
+//    func testLaunchPerformance() throws {
+//        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
+//            // This measures how long it takes to launch your application.
+//            measure(metrics: [XCTApplicationLaunchMetric()]) {
+//                XCUIApplication().launch()
+//            }
+//        }
+//    }
 }

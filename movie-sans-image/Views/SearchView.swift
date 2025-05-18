@@ -25,6 +25,8 @@ struct SearchView: View {
                         prompt: Text("Search for movies")
                             .foregroundColor(.gray)
                     )
+                    .accessibilityIdentifier("SearchBar")
+                    .accessibilityValue(hasFocus ? "focused" : "unfocused")
                     .font(.custom("Futura", size: 16))
                     .onChange(of: searchViewModel.searchText) { _, newValue in
                         if newValue == "" {
@@ -76,6 +78,7 @@ struct SearchView: View {
 
                 if hasFocus {
                     Text("Cancel")
+                        .accessibilityIdentifier("SearchBarCancelButton")
                         .font(.custom("Futura", size: 12))
                         .onTapGesture {
                             hasFocus = false
