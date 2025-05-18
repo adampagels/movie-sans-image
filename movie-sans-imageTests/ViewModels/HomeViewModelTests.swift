@@ -18,7 +18,7 @@ struct HomeViewModelTests {
         )
 
         viewModel.selectedCategory = .upcoming
-        await viewModel.getMovies()
+        await viewModel.getMovies(showLoading: true)
 
         if case let .loaded(movies) = viewModel.loadingState {
             #expect(movies.count == 3)
@@ -115,7 +115,7 @@ struct HomeViewModelTests {
             movieWatchlistStatusService: movieWatchlistStatusService
         )
 
-        await viewModel.getMovies()
+        await viewModel.getMovies(showLoading: true)
 
         if case let .failed(message) = viewModel.loadingState {
             #expect(message == APIError.serverError.localizedDescription)

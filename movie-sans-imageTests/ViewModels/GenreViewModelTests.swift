@@ -19,7 +19,7 @@ struct GenreViewModelTests {
 
         let genreID = "28"
 
-        await viewModel.getMoviesByGenreID(genreID: genreID)
+        await viewModel.getMoviesByGenreID(genreID: genreID, showLoading: true)
 
         if case let .loaded(movies) = viewModel.loadingState {
             #expect(apiService.lastDiscoverQuery == genreID)
@@ -118,7 +118,7 @@ struct GenreViewModelTests {
 
         let genreID = "28"
 
-        await viewModel.getMoviesByGenreID(genreID: genreID)
+        await viewModel.getMoviesByGenreID(genreID: genreID, showLoading: true)
 
         if case let .failed(message) = viewModel.loadingState {
             #expect(message == APIError.serverError.localizedDescription)
