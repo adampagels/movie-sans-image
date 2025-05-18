@@ -34,6 +34,10 @@ struct GenreView: View {
                         }
                     )
                 }
+                .refreshable(action: {
+                    await genreViewModel.getMoviesByGenreID(genreID: genre.id, showLoading: false)
+                    genreViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
+                })
                 .buttonStyle(BorderlessButtonStyle())
                 .listStyle(PlainListStyle())
                 .scrollIndicators(.hidden)
@@ -47,7 +51,7 @@ struct GenreView: View {
             }
         }
         .task {
-            await genreViewModel.getMoviesByGenreID(genreID: genre.id)
+            await genreViewModel.getMoviesByGenreID(genreID: genre.id, showLoading: true)
             genreViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
         }
         .toolbar {

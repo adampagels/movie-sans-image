@@ -33,8 +33,10 @@ class GenreViewModel {
     }
 
     @MainActor
-    func getMoviesByGenreID(genreID: String) async {
-        loadingState = .loading
+    func getMoviesByGenreID(genreID: String, showLoading: Bool) async {
+        if showLoading {
+            loadingState = .loading
+        }
         do {
             let movies = try await apiService.discoverMovies(with: genreID)
             loadingState = .loaded(movies)
