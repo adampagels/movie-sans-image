@@ -7,6 +7,12 @@
 
 import XCTest
 
+func assertMovieTapShowsDetails(in app: XCUIApplication) {
+    let movieItem = app.buttons["MovieListItem"].firstMatch
+    movieItem.tap()
+    XCTAssertTrue(app.otherElements["DetailViewSheet"].exists)
+}
+
 final class movie_sans_imageUITests: XCTestCase {
     let app = XCUIApplication()
     override func setUpWithError() throws {
@@ -16,12 +22,42 @@ final class movie_sans_imageUITests: XCTestCase {
 
     override func tearDownWithError() throws {}
 
-    func testMovieTitlePressOpensDetailView() {
-        let movieItem = app.buttons["MovieListItem"].firstMatch
-        movieItem.tap()
+    func testMovieTitleInHomeViewPressOpensDetailView() {
+        assertMovieTapShowsDetails(in: app)
+    }
 
-        let movieDetailSheet = app.otherElements["DetailViewSheet"]
-        XCTAssertTrue(movieDetailSheet.exists)
+    func testMovieTitleInGenreViewPressOpensDetailView() {
+        app.tabBars["Tab Bar"].buttons["Search"].tap()
+        app.buttons["GenreListItem"].firstMatch.tap()
+
+        assertMovieTapShowsDetails(in: app)
+    }
+
+    func testMovieTitleInWatchlistViewPressOpensDetailView() {
+        let movieItemInHomeView = app.buttons["MovieListItem"].firstMatch
+        let movieLabel = movieItemInHomeView.label
+
+        app.buttons["Add"].firstMatch.tap()
+        app.tabBars["Tab Bar"].buttons["Watchlist"].tap()
+
+        app.buttons[movieLabel].tap()
+        XCTAssertTrue(app.otherElements["DetailViewSheet"].exists)
+    }
+
+    func testMovieTitleInSearchViewPressOpensDetailView() {
+        app.tabBars["Tab Bar"].buttons["Search"].tap()
+        let searchBar = app.textFields["SearchBar"]
+
+        searchBar.tap()
+        app.keys["M"].tap()
+        app.keys["o"].tap()
+        app.keys["v"].tap()
+        app.keys["i"].tap()
+        app.keys["e"].tap()
+
+        app.keyboards.buttons["search"].tap()
+
+        assertMovieTapShowsDetails(in: app)
     }
 
     func testDetailViewOpensDetailViewWithSelectedMovieTitle() {

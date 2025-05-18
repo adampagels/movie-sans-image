@@ -143,6 +143,7 @@ struct SearchView: View {
                             .multilineTextAlignment(.center)
                             .foregroundStyle(.gray)
                     }
+                    .accessibilityIdentifier("NoResultsContainer")
                     .padding()
                     .padding(.vertical)
                 }
