@@ -41,32 +41,8 @@ struct SearchView: View {
                     Text("Discover by genre")
                         .font(.custom("Futura-Bold", size: 17))
                         .listRowBackground(Color.backgroundColor)
-                    LazyVGrid(
-                        columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)],
-                        spacing: 22
-                    ) {
-                        ForEach(MovieGenre.allCases, id: \.rawValue) { genre in
-                            NeubrutalContainerView(
-                                backgroundColor: genre.backgroundColor,
-                                borderColor: Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255),
-                                shadowStyle: .large
-                            ) {
-                                Text(genre.rawValue)
-                                    .padding()
-                                    .padding(.vertical)
-                                    .fixedSize()
-                                    .foregroundStyle(.white)
-                                    .font(.custom("Futura-Bold", size: 16))
-                            }
-                            .accessibility(addTraits: .isButton)
-                            .accessibilityIdentifier("GenreListItem")
-                            .onTapGesture {
-                                router.push(Route.genre(genre))
-                            }
-                        }
-                    }
-                    .listRowBackground(Color.backgroundColor)
-                    .listRowSeparator(.hidden)
+
+                    GenreList(router: router)
                 }
                 .buttonStyle(BorderlessButtonStyle())
                 .listStyle(PlainListStyle())
