@@ -11,81 +11,30 @@ struct SearchView: View {
     var watchlistViewModel: WatchlistViewModel
     @State var searchViewModel: SearchViewModel
     @State var router: NavigationRouter
-    @FocusState private var hasFocus: Bool
 
     var body: some View {
         VStack {
-            HStack {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(Color.secondaryColor)
-                    TextField(
-                        "",
-                        text: $searchViewModel.searchText,
-                        prompt: Text("Search for movies")
-                            .foregroundColor(.gray)
-                    )
-                    .accessibilityIdentifier("SearchBar")
-                    .accessibilityValue(hasFocus ? "focused" : "unfocused")
-                    .font(.custom("Futura", size: 16))
-                    .onChange(of: searchViewModel.searchText) { _, newValue in
-                        if newValue == "" {
-                            searchViewModel.shouldShowGenreList = true
-                            searchViewModel.shouldShowNoResultsMessage = false
+            SearchBar(
+                searchText: $searchViewModel.searchText,
+                onSubmit: {
+                    guard !searchViewModel.searchText.isEmpty else {
+                        return withAnimation(.default) {
+                            searchViewModel.emptySearchAttempts += 1
                         }
                     }
-                    .font(.callout)
-                    .focused($hasFocus)
-                    .tint(.secondaryColor)
-                    .submitLabel(.search)
-                    .keyboardType(.default)
-                    .onSubmit {
-                        guard !searchViewModel.searchText.isEmpty else {
-                            return withAnimation(.default) {
-                                searchViewModel.attempts += 1
-                            }
-                        }
-                        Task {
-                            await searchViewModel.searchMovies()
-                            searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
-                        }
+                    Task {
+                        await searchViewModel.searchMovies()
+                        searchViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)
                     }
-
-                    if !searchViewModel.searchText.isEmpty {
-                        Button(action: { searchViewModel.searchText = "" }) {
-                            Image(systemName: "xmark")
-                                .foregroundColor(Color.secondaryColor)
-                        }
+                },
+                onChange: { (newValue: String) in
+                    if newValue == "" {
+                        searchViewModel.shouldShowGenreList = true
+                        searchViewModel.shouldShowNoResultsMessage = false
                     }
-                }
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.primaryColor))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(lineWidth: 3).foregroundColor(hasFocus ? Color.tertiaryColor : Color.clear)
-                )
-                .foregroundColor(Color.secondaryColor)
-                .onAppear { hasFocus = searchViewModel.hasFocus }
-                .onChange(of: hasFocus) { _, newValue in
-                    searchViewModel.hasFocus = newValue
-                }
-                .onChange(of: searchViewModel.hasFocus) { _, newValue in
-                    hasFocus = newValue
-                }
-                .sensoryFeedback(.error, trigger: searchViewModel.attempts)
-                .modifier(Shake(animatableData: CGFloat(searchViewModel.attempts)))
-
-                if hasFocus {
-                    Text("Cancel")
-                        .accessibilityIdentifier("SearchBarCancelButton")
-                        .font(.custom("Futura", size: 12))
-                        .onTapGesture {
-                            hasFocus = false
-                        }
-                }
-            }
-            .padding()
+                },
+                emptySearchAttempts: searchViewModel.emptySearchAttempts
+            )
 
             if searchViewModel.shouldShowGenreList {
                 List {
