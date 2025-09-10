@@ -59,18 +59,7 @@ struct SearchView: View {
 
             case let .loaded(movies):
                 if searchViewModel.shouldShowNoResultsMessage {
-                    VStack(alignment: .center) {
-                        Text("Looks like we're out of that.")
-                            .font(.title)
-                            .fontWeight(.bold)
-                        Text("Try searching for another movie and we'll see what we can do.")
-                            .font(.headline)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.gray)
-                    }
-                    .accessibilityIdentifier("NoResultsContainer")
-                    .padding()
-                    .padding(.vertical)
+                    NoResultsView()
                 }
 
                 if !searchViewModel.shouldShowGenreList {
