@@ -10,7 +10,7 @@ import Foundation
 class APIService: APIServiceProtocol {
     private let baseURL: URL
 
-    init(baseURL: URL = URL(string: "https://api.themoviedb.org/3")!) {
+    init(baseURL: URL = URL(string: "https://tmdb-proxy.movie-sans-image-proxy.workers.dev/api")!) {
         self.baseURL = baseURL
     }
 
@@ -19,7 +19,7 @@ class APIService: APIServiceProtocol {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = [
             "accept": "application/json",
-            "Authorization": "Bearer \(Config.apiKey)",
+            "X-App-Secret": Config.appSecret,
         ]
 
         do {
