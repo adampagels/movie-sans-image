@@ -13,17 +13,7 @@ struct HomeView: View {
 
     var body: some View {
         VStack {
-            VStack(alignment: .leading) {
-                Image("TMDBLogo")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100)
-
-                Text("This product uses the TMDB API but is not endorsed or certified by TMDB.")
-                    .font(.custom("Futura", size: 10))
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading)
+            AttributionView()
 
             CategoryList(
                 selectedCategory: homeViewModel.selectedCategory,
