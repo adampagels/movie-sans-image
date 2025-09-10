@@ -97,8 +97,12 @@ struct SearchView: View {
                     }
                 }
 
-            case .failed:
-                Text("Error")
+            case let .failed(error):
+                Text(error)
+                    .multilineTextAlignment(.center)
+                    .frame(maxHeight: .infinity, alignment: .center)
+                    .padding()
+                    .foregroundStyle(.red)
             }
         }
         .frame(maxHeight: .infinity, alignment: .top)

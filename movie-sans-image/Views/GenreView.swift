@@ -45,11 +45,15 @@ struct GenreView: View {
                     DetailView(movie: movie)
                 }
 
-            case .failed:
-                Text("Error")
+            case let .failed(error):
+                Text(error)
+                    .multilineTextAlignment(.center)
                     .frame(maxHeight: .infinity, alignment: .center)
+                    .padding()
+                    .foregroundStyle(.red)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .task {
             await genreViewModel.getMoviesByGenreID(genreID: genre.id, showLoading: true)
             genreViewModel.initializeWatchlistStatus(watchlist: watchlistViewModel.watchlist)

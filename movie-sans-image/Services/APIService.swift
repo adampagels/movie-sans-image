@@ -91,19 +91,19 @@ enum APIError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "Something went wrong with the request. Please try again later."
+            return "Something went wrong with the request.\nPlease try again later."
         case .connectionFailed:
-            return "We couldn't connect to the internet. Please check your connection and try again."
+            return "We couldn't connect to the internet.\nPlease check your connection and try again."
         case .clientError:
-            return "There was an issue with your request. Please check and try again."
+            return "There was an issue with your request.\nPlease try again."
         case .serverError:
-            return "Our servers are having trouble right now. Please try again shortly."
+            return "Our servers are having trouble right now.\nPlease try again shortly."
         case .invalidResponse:
-            return "We received an unexpected response. Please try again later."
+            return "We received an unexpected response.\nPlease try again later."
         case .invalidData:
-            return "Something went wrong while processing the data. Please try again."
+            return "Something went wrong while processing the data.\nPlease try again."
         case .failedToDecode:
-            return "We couldn’t read the information properly. Please try again later."
+            return "We couldn’t read the information properly.\nPlease try again later."
         case let .underlying(error):
             return error.localizedDescription
         }
