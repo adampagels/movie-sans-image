@@ -19,6 +19,7 @@ struct MovieListItem: View {
                 Text(movie.title)
                     .font(.custom("Futura", size: 18))
                     .padding()
+                    .lineLimit(1)
 
                 Spacer()
 
