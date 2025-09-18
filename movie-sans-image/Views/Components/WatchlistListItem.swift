@@ -30,15 +30,17 @@ struct WatchlistListItem: View {
                 Text(movie.title)
                     .strikethrough(movie.isWatched)
                     .font(.custom("Futura", size: 18))
+                    .lineLimit(1)
             }
             .onTapGesture {
                 onSelect(movie)
             }
+            .padding(.vertical, 6)
             .accessibility(addTraits: .isButton)
             .accessibilityIdentifier("WatchlistListItem")
             .frame(maxWidth: .infinity, alignment: .topLeading)
         }
-        .padding(.bottom)
+
         .swipeActions(allowsFullSwipe: true) {
             Button(role: .destructive) {
                 removeFromWatchlist()

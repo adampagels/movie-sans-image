@@ -31,6 +31,7 @@ struct MovieListItem: View {
                 .sensoryFeedback(.impact(weight: .heavy), trigger: isInWatchlist)
                 .padding()
             }
+            .padding(.vertical, 6)
             .onTapGesture(perform: onSelect)
             .accessibility(addTraits: .isButton)
             .accessibilityIdentifier("MovieListItem")

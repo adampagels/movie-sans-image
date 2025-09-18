@@ -25,7 +25,10 @@ struct WatchlistList: View {
                 },
                 onSelect: onSelect
             )
+            .padding(.vertical, 10)
+            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
             .listRowSeparator(.hidden)
+            .listRowBackground(Color.backgroundColor)
         }
     }
 }
