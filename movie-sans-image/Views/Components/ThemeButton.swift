@@ -11,21 +11,14 @@ struct ThemeButton: ToolbarContent {
     @AppStorage("theme") var theme: Theme = .system
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
-            NeubrutalContainerView(
-                backgroundColor: theme.iconBackgroundColor,
-                borderColor: Color.primaryColor,
-                shadowStyle: .small
-            ) {
-                Image(systemName: theme.iconName)
-                    .padding(7)
-                    .foregroundStyle(theme.iconColor)
-                    .fixedSize()
-                    .imageScale(.small)
-                    .symbolEffect(.bounce, options: .repeat(1), value: theme)
-            }
-            .padding(1.5)
-            .onTapGesture {
+            Button {
                 theme = theme == .dark ? .light : .dark
+            } label: {
+                Image(systemName: theme.iconName)
+                    .foregroundStyle(theme.iconColor)
+                    .imageScale(.medium)
+                    .symbolEffect(.bounce, options: .repeat(1), value: theme)
+                    .fixedSize()
             }
         }
     }
