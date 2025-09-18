@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct WatchlistListItem: View {
-    let movie: WatchlistEntity
-    let isWatched: Bool
+    @ObservedObject var movie: WatchlistEntity
     let toggleWatched: () -> Void
     let removeFromWatchlist: () -> Void
     let onSelect: (WatchlistEntity) -> Void
@@ -20,16 +19,16 @@ struct WatchlistListItem: View {
                 Button(action: {
                     toggleWatched()
                 }) {
-                    Image(systemName: isWatched ? "checkmark.square.fill" : "square")
+                    Image(systemName: movie.isWatched ? "checkmark.square.fill" : "square")
                         .imageScale(.large)
                         .foregroundStyle(Color.tertiaryColor)
                 }
-                .sensoryFeedback(.impact(weight: .heavy), trigger: isWatched)
+                .sensoryFeedback(.impact(weight: .heavy), trigger: movie.isWatched)
                 .padding()
                 .buttonStyle(.plain)
 
                 Text(movie.title)
-                    .strikethrough(isWatched)
+                    .strikethrough(movie.isWatched)
                     .font(.custom("Futura", size: 18))
             }
             .onTapGesture {

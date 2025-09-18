@@ -14,10 +14,9 @@ struct WatchlistList: View {
     let onSelect: (WatchlistEntity) -> Void
 
     var body: some View {
-        ForEach(movies) { movie in
+        ForEach(movies, id: \.objectID) { movie in
             WatchlistListItem(
                 movie: movie,
-                isWatched: movie.isWatched,
                 toggleWatched: {
                     toggleWatched(movie)
                 },
@@ -26,6 +25,7 @@ struct WatchlistList: View {
                 },
                 onSelect: onSelect
             )
+            .listRowSeparator(.hidden)
         }
     }
 }
