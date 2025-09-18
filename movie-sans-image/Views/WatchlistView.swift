@@ -32,6 +32,8 @@ struct WatchlistView: View {
         .toolbar {
             ThemeButton()
         }
+        .navigationTitle("Watchlist")
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 
