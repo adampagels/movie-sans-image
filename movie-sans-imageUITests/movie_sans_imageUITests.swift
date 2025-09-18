@@ -15,12 +15,24 @@ func assertMovieTapShowsDetails(in app: XCUIApplication) {
 
 final class movie_sans_imageUITests: XCTestCase {
     let app = XCUIApplication()
+
     override func setUpWithError() throws {
         continueAfterFailure = false
+
+        app.launchArguments += ["-ui-testing"]
+
+        if app.state != .notRunning {
+            app.terminate()
+        }
+
         app.launch()
     }
 
-    override func tearDownWithError() throws {}
+    override func tearDownWithError() throws {
+        if app.state != .notRunning {
+            app.terminate()
+        }
+    }
 
     func testMovieTitleInHomeViewPressOpensDetailView() {
         assertMovieTapShowsDetails(in: app)
@@ -148,7 +160,6 @@ final class movie_sans_imageUITests: XCTestCase {
 //    @MainActor
 //    func testLaunchPerformance() throws {
 //        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-//            // This measures how long it takes to launch your application.
 //            measure(metrics: [XCTApplicationLaunchMetric()]) {
 //                XCUIApplication().launch()
 //            }
