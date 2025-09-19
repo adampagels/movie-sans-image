@@ -31,7 +31,9 @@ struct MainView: View {
 
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor.systemBackground
+        tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+            .foregroundColor: UIColor(Color.tertiaryColor),
+        ]
 
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Futura-Bold", size: 30)!]
 
@@ -80,6 +82,7 @@ struct MainView: View {
                 }
             }
         }
+        .accentColor(.tertiaryColor)
     }
 }
 
