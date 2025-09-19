@@ -14,7 +14,7 @@ struct WatchlistList: View {
     let onSelect: (WatchlistEntity) -> Void
 
     var body: some View {
-        ForEach(movies, id: \.objectID) { movie in
+        ForEach(movies, id: \.idRaw) { movie in
             WatchlistListItem(
                 movie: movie,
                 toggleWatched: {

@@ -24,7 +24,6 @@ struct WatchlistListItem: View {
                         .foregroundStyle(Color.tertiaryColor)
                 }
                 .sensoryFeedback(.impact(weight: .heavy), trigger: movie.isWatched)
-                .padding()
                 .buttonStyle(.plain)
 
                 Text(movie.title)
@@ -35,7 +34,8 @@ struct WatchlistListItem: View {
             .onTapGesture {
                 onSelect(movie)
             }
-            .padding(.vertical, 6)
+            .padding(.horizontal)
+            .padding(.vertical, 22)
             .accessibility(addTraits: .isButton)
             .accessibilityIdentifier("WatchlistListItem")
             .frame(maxWidth: .infinity, alignment: .topLeading)
