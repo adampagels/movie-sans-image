@@ -59,7 +59,10 @@ struct SearchView: View {
 
             case let .loaded(movies):
                 if searchViewModel.shouldShowNoResultsMessage {
-                    NoResultsView()
+                    EmptyStateView(
+                        title: "Looks like we're out of that.",
+                        subtitle: "Try searching for another movie and we'll see what we can do."
+                    )
                 }
 
                 if !searchViewModel.shouldShowGenreList {
